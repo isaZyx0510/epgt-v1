@@ -1,0 +1,71 @@
+{
+  "experiment": "e6_physics_guided_attention",
+  "method": "epgt_v1",
+  "config": {
+    "data_config": "configs/data/e1_clean_transformer.yaml",
+    "model_config": "configs/model/pgt/epgt_v1_mask_only.yaml",
+    "architecture": "epgt_v1",
+    "model": {
+      "d_model": 16,
+      "nhead": 4,
+      "num_layers": 1,
+      "dim_feedforward": 32,
+      "dropout": 0.0,
+      "max_rel_delay_s": 3e-06,
+      "max_doppler_hz": 200.0,
+      "max_total_delay_s": 1e-06,
+      "max_cfo_hz": 500.0,
+      "max_rx_time_offset_s": 2e-07
+    },
+    "physics": {
+      "use_cross_attention_bias": false,
+      "use_reliability_mask": true,
+      "center_residual_doppler": true,
+      "bias_scale": 1.0,
+      "bias_eps": 1e-06,
+      "symbol_period_s": 0.001,
+      "subcarrier_spacing_hz": 15000.0,
+      "min_reliability": 0.5
+    },
+    "l_eff": 12
+  },
+  "history": [
+    {
+      "step": 0,
+      "train_loss": 0.5899023413658142,
+      "param_loss": 0.5899023413658142,
+      "tau0_loss": 0.2706755995750427,
+      "cfo_loss": 0.03617563843727112,
+      "delay_loss": 0.2234257459640503,
+      "doppler_loss": 0.03901608660817146,
+      "rx_offset_loss": 0.020609267055988312,
+      "channel_nmse": 20673814.0,
+      "channel_nmse_db": 73.15420604656052,
+      "observed_symbol_nmse": 0.05069050192832947,
+      "observed_symbol_nmse_db": -12.950734084400652,
+      "val_channel_nmse": 20673814.0,
+      "val_channel_nmse_db": 73.15420604656052,
+      "val_observed_symbol_nmse": 0.05069050192832947,
+      "val_observed_symbol_nmse_db": -12.950734084400652
+    }
+  ],
+  "final": {
+    "step": 0,
+    "train_loss": 0.5899023413658142,
+    "param_loss": 0.5899023413658142,
+    "tau0_loss": 0.2706755995750427,
+    "cfo_loss": 0.03617563843727112,
+    "delay_loss": 0.2234257459640503,
+    "doppler_loss": 0.03901608660817146,
+    "rx_offset_loss": 0.020609267055988312,
+    "channel_nmse": 20673814.0,
+    "channel_nmse_db": 73.15420604656052,
+    "observed_symbol_nmse": 0.05069050192832947,
+    "observed_symbol_nmse_db": -12.950734084400652,
+    "val_channel_nmse": 20673814.0,
+    "val_channel_nmse_db": 73.15420604656052,
+    "val_observed_symbol_nmse": 0.05069050192832947,
+    "val_observed_symbol_nmse_db": -12.950734084400652
+  },
+  "variant": "epgt_v1_mask_only"
+}

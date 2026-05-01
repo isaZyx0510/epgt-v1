@@ -1,0 +1,27 @@
+[
+  {
+    "l_eff": 2,
+    "channel_nmse_db": -54.644202157055034,
+    "observed_symbol_nmse_db": -54.64420359557133
+  },
+  {
+    "l_eff": 4,
+    "channel_nmse_db": -98.56070441963377,
+    "observed_symbol_nmse_db": -98.56062653646606
+  },
+  {
+    "l_eff": 6,
+    "channel_nmse_db": -97.91136306856589,
+    "observed_symbol_nmse_db": -97.91155384308199
+  },
+  {
+    "l_eff": 8,
+    "channel_nmse_db": -119.9237761271668,
+    "observed_symbol_nmse_db": -119.92468711329431
+  },
+  {
+    "l_eff": 12,
+    "channel_nmse_db": -119.90975191092146,
+    "observed_symbol_nmse_db": -119.91005549999129
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "method": "original_v1_param_160",
+    "weight": null,
+    "channel_nmse": 1.2520402788614623e-08,
+    "observed_symbol_nmse": 1.2520363708764156e-08,
+    "metrics_path": "experiments\\two_stage_reconstruction_sweep\\original_v1_param_160_metrics.json"
+  },
+  {
+    "method": "query_v1_two_stage",
+    "weight": 0.01,
+    "channel_nmse": 2.71658462391855e-09,
+    "observed_symbol_nmse": 2.716548689699986e-09,
+    "metrics_path": "experiments\\two_stage_reconstruction_sweep\\weight_0.01_metrics.json"
+  },
+  {
+    "method": "query_v1_two_stage",
+    "weight": 0.05,
+    "channel_nmse": 1.5376590001281443e-09,
+    "observed_symbol_nmse": 1.5374574576417406e-09,
+    "metrics_path": "experiments\\two_stage_reconstruction_sweep\\weight_0.05_metrics.json"
+  },
+  {
+    "method": "query_v1_two_stage",
+    "weight": 0.1,
+    "channel_nmse": 2.1355828216940154e-09,
+    "observed_symbol_nmse": 2.135560857781845e-09,
+    "metrics_path": "experiments\\two_stage_reconstruction_sweep\\weight_0.1_metrics.json"
+  },
+  {
+    "method": "query_v1_two_stage",
+    "weight": 0.5,
+    "channel_nmse": 5.79628286108876e-09,
+    "observed_symbol_nmse": 5.796565153796489e-09,
+    "metrics_path": "experiments\\two_stage_reconstruction_sweep\\weight_0.5_metrics.json"
+  }
+]

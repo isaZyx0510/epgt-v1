@@ -1,0 +1,5 @@
+extends: epgt_v1_base.yaml
+physics:
+  use_cross_attention_bias: true
+  use_reliability_mask: false
+

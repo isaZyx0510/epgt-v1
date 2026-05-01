@@ -1,0 +1,38 @@
+﻿[
+    {
+        "name":  "original_v1_param_metrics.json",
+        "architecture":  "original_v1",
+        "loss_mode":  "param",
+        "reconstruction_weight":  1.0,
+        "channel_nmse":  7.4293535590186366E-07,
+        "observed_symbol_nmse":  7.4292114504714846E-07,
+        "train_loss":  0.31497564911842346,
+        "param_loss":  0.31497564911842346,
+        "reconstruction_loss":  null,
+        "ls_mode":  "traditional_ls"
+    },
+    {
+        "name":  "query_v1_reconstruction_metrics.json",
+        "architecture":  "query_v1",
+        "loss_mode":  "reconstruction",
+        "reconstruction_weight":  1.0,
+        "channel_nmse":  0.0010139749695857365,
+        "observed_symbol_nmse":  0.0010139501149145265,
+        "train_loss":  0.20503704249858856,
+        "param_loss":  0.5783892869949341,
+        "reconstruction_loss":  0.20503704249858856,
+        "ls_mode":  "traditional_ls"
+    },
+    {
+        "name":  "query_v1_param_plus_reconstruction_metrics.json",
+        "architecture":  "query_v1",
+        "loss_mode":  "param_plus_reconstruction",
+        "reconstruction_weight":  1.0,
+        "channel_nmse":  3.7727891898005814E-06,
+        "observed_symbol_nmse":  3.7728235232255733E-06,
+        "train_loss":  0.39807242155075073,
+        "param_loss":  0.3642638027667999,
+        "reconstruction_loss":  0.03380860388278961,
+        "ls_mode":  "traditional_ls"
+    }
+]

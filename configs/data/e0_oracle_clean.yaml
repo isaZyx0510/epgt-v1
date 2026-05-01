@@ -1,0 +1,46 @@
+batch_size: 8
+seed: 1000
+l_eff: 12
+ridge: 0.0
+
+ofdm:
+  n_tx: 4
+  n_rx: 4
+  n_sc: 48
+  n_sym: 8
+  cp_len: 16
+  subcarrier_spacing_hz: 15000.0
+  modulation: 16QAM
+
+pilot:
+  mode: sparse2d
+  symbol_spacing: 2
+  subcarrier_spacing: 4
+  orthogonal_axis: frequency
+  pilot_power: 1.0
+
+channel:
+  model: tdl_c
+  mimo_mode: common_delay
+  n_paths: 12
+  delay_spread_s: 3.0e-7
+  normalize_power: true
+  dominant_path_decay_db: 3.0
+  max_doppler_hz: 0.0
+  randomize_path_subset: false
+
+impairment:
+  snr_db: 100.0
+  cfo_hz: 0.0
+  random_cfo_hz: 0.0
+
+thesis_impairment:
+  tau0_range_s: [0.0, 200.0e-9]
+  cfo_range_hz: [-100.0, 100.0]
+  rx_time_offset_range_s: [-50.0e-9, 50.0e-9]
+  awgn_snr_db:
+
+observation:
+  input_symbol_indices: [6, 7]
+  symbol_error_rate: 0.0
+  include_reliability: true

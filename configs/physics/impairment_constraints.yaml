@@ -1,0 +1,6 @@
+physics:
+  rx_reference_index: 0
+  fix_reference_rx_offset: true
+  center_residual_doppler: true
+  delay_sorting: ascending
+

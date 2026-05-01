@@ -1,0 +1,21 @@
+.venv/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Local/generated experiment outputs
+experiments/test_artifacts/
+experiments/*_smoke/
+experiments/quick/
+
+# Generated slide QA artifacts
+docs/pgt/epgt_v1_architecture_ppt/previews/
+docs/pgt/epgt_v1_architecture_ppt/parity/
+docs/pgt/epgt_v1_architecture_ppt/reports/
+
+# OS/editor noise
+~$*
+.DS_Store
+Thumbs.db

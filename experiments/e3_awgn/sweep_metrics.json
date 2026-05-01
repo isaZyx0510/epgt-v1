@@ -1,0 +1,54 @@
+[
+  {
+    "experiment": "e3_awgn",
+    "method": "hybrid",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.5957591533660889,
+        "param_loss": 0.5957591533660889,
+        "tau0_loss": 0.21999801695346832,
+        "cfo_loss": 0.07288684695959091,
+        "delay_loss": 0.20535491406917572,
+        "doppler_loss": 0.05793185159564018,
+        "rx_offset_loss": 0.03958752751350403,
+        "channel_nmse_db": 69.20005654129098,
+        "observed_symbol_nmse_db": -13.129140937232844
+      }
+    ],
+    "final": {
+      "step": 0,
+      "train_loss": 0.5957591533660889,
+      "param_loss": 0.5957591533660889,
+      "tau0_loss": 0.21999801695346832,
+      "cfo_loss": 0.07288684695959091,
+      "delay_loss": 0.20535491406917572,
+      "doppler_loss": 0.05793185159564018,
+      "rx_offset_loss": 0.03958752751350403,
+      "channel_nmse_db": 69.20005654129098,
+      "observed_symbol_nmse_db": -13.129140937232844
+    },
+    "sweep_name": "snr_db",
+    "sweep_value": 20.0
+  },
+  {
+    "experiment": "e3_awgn",
+    "method": "direct_h",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.5163721442222595,
+        "channel_nmse_db": 0.02261968853093517,
+        "observed_symbol_nmse_db": 0.015766446564620857
+      }
+    ],
+    "final": {
+      "step": 0,
+      "train_loss": 0.5163721442222595,
+      "channel_nmse_db": 0.02261968853093517,
+      "observed_symbol_nmse_db": 0.015766446564620857
+    },
+    "sweep_name": "snr_db",
+    "sweep_value": 20.0
+  }
+]

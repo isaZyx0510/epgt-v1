@@ -1,0 +1,17 @@
+schema: spec-driven
+
+context: |
+  项目：面向 MIMO-OFDM 信道估计的 Transformer 毕设实验工程。
+  领域：TDL-C common-delay MIMO-OFDM、16QAM、稀疏 data-aided 观测、
+    effective-path 压缩、接收端采样时间偏移、全局 total delay 与 CFO 估计。
+  实现风格：项目保持自包含，先把成熟的 TDLC 数据生成模块复制到本工程，
+    再在其上做论文所需的物理建模、估计器、Transformer 与实验扩展。
+
+rules:
+  proposal:
+    - 必须明确写出实验假设。
+    - 必须清楚列出 non-goals，避免第一版膨胀到 array-response 建模。
+  tasks:
+    - 任务顺序必须保证 E0 oracle LS 先跑通，再进入神经网络训练。
+    - 每引入一个新的物理 impairment，都必须配套测试。
+

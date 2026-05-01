@@ -1,0 +1,241 @@
+{
+  "experiment": "e6_physics_guided_attention",
+  "diagnostic": "oracle_replacement",
+  "config": {
+    "data_config": "configs/data/e1_clean_transformer.yaml",
+    "model_config": "configs/model/pgt/epgt_v1_full.yaml",
+    "architecture": "epgt_v1",
+    "steps": 5,
+    "lr": 0.001,
+    "train_batches": 1,
+    "val_seed_offset": 10000,
+    "model": {
+      "d_model": 16,
+      "nhead": 4,
+      "num_layers": 1,
+      "dim_feedforward": 32,
+      "dropout": 0.0,
+      "max_rel_delay_s": 3e-06,
+      "max_doppler_hz": 200.0,
+      "max_total_delay_s": 1e-06,
+      "max_cfo_hz": 500.0,
+      "max_rx_time_offset_s": 2e-07
+    },
+    "physics": {
+      "use_cross_attention_bias": true,
+      "use_reliability_mask": true,
+      "center_residual_doppler": true,
+      "bias_scale": 1.0,
+      "bias_eps": 1e-06,
+      "symbol_period_s": 0.001,
+      "subcarrier_spacing_hz": 15000.0,
+      "min_reliability": 0.75
+    },
+    "l_eff": 12,
+    "model_cfg": {
+      "input_dim": 20,
+      "l_eff": 12,
+      "n_rx": 4,
+      "n_tx": 4,
+      "n_sym": 8,
+      "n_sc": 48,
+      "d_model": 16,
+      "nhead": 4,
+      "num_layers": 1,
+      "dim_feedforward": 32,
+      "dropout": 0.0,
+      "max_rel_delay_s": 3e-06,
+      "max_doppler_hz": 200.0,
+      "max_total_delay_s": 1e-06,
+      "max_cfo_hz": 500.0,
+      "max_rx_time_offset_s": 2e-07
+    }
+  },
+  "history": [
+    {
+      "step": 0.0,
+      "train_loss": 0.6551340818405151,
+      "tau0_loss": 0.2682034373283386,
+      "cfo_loss": 0.13042865693569183,
+      "delay_loss": 0.19538255035877228,
+      "doppler_loss": 0.029453329741954803,
+      "rx_offset_loss": 0.03166608139872551
+    },
+    {
+      "step": 1.0,
+      "train_loss": 0.580348789691925,
+      "tau0_loss": 0.2539466321468353,
+      "cfo_loss": 0.084141805768013,
+      "delay_loss": 0.19110232591629028,
+      "doppler_loss": 0.023020317777991295,
+      "rx_offset_loss": 0.02813766524195671
+    },
+    {
+      "step": 2.0,
+      "train_loss": 0.5192503333091736,
+      "tau0_loss": 0.2388545274734497,
+      "cfo_loss": 0.04840850830078125,
+      "delay_loss": 0.18733097612857819,
+      "doppler_loss": 0.018812047317624092,
+      "rx_offset_loss": 0.025844259187579155
+    },
+    {
+      "step": 3.0,
+      "train_loss": 0.4715542197227478,
+      "tau0_loss": 0.2233237624168396,
+      "cfo_loss": 0.02371835708618164,
+      "delay_loss": 0.1839839220046997,
+      "doppler_loss": 0.016269532963633537,
+      "rx_offset_loss": 0.024258634075522423
+    },
+    {
+      "step": 4.0,
+      "train_loss": 0.4362373650074005,
+      "tau0_loss": 0.20794303715229034,
+      "cfo_loss": 0.00924769602715969,
+      "delay_loss": 0.18106818199157715,
+      "doppler_loss": 0.014802969060838223,
+      "rx_offset_loss": 0.023175466805696487
+    }
+  ],
+  "param_errors": {
+    "total_delay_s_mae": 4.1182221366398153e-07,
+    "total_delay_s_rmse": 4.137602331866219e-07,
+    "cfo_hz_mae": 19.143325805664062,
+    "cfo_hz_rmse": 25.965749740600586,
+    "rx_time_offsets_s_mae": 2.0712477066808788e-08,
+    "rx_time_offsets_s_rmse": 2.8165635157506586e-08,
+    "rel_delay_s_mae": 1.2636753581318771e-06,
+    "rel_delay_s_rmse": 1.2648904430534458e-06,
+    "doppler_hz_mae": 17.595230102539062,
+    "doppler_hz_rmse": 23.84074592590332
+  },
+  "replacement_rows": [
+    {
+      "variant": "predicted_all",
+      "oracle_keys": [],
+      "final": {
+        "channel_nmse": 10233099.0,
+        "observed_symbol_nmse": 0.055549222975969315,
+        "channel_nmse_db": 70.10007175724414,
+        "observed_symbol_nmse_db": -12.553220115957455
+      }
+    },
+    {
+      "variant": "oracle_total_delay",
+      "oracle_keys": [
+        "total_delay_s"
+      ],
+      "final": {
+        "channel_nmse": 1159990.75,
+        "observed_symbol_nmse": 0.005470484495162964,
+        "channel_nmse_db": 60.64454526089009,
+        "observed_symbol_nmse_db": -22.619742084577773
+      }
+    },
+    {
+      "variant": "oracle_cfo",
+      "oracle_keys": [
+        "cfo_hz"
+      ],
+      "final": {
+        "channel_nmse": 8866612.0,
+        "observed_symbol_nmse": 0.05451154708862305,
+        "channel_nmse_db": 69.47757704298074,
+        "observed_symbol_nmse_db": -12.635114921063753
+      }
+    },
+    {
+      "variant": "oracle_rx_offsets",
+      "oracle_keys": [
+        "rx_time_offsets_s"
+      ],
+      "final": {
+        "channel_nmse": 8799487.0,
+        "observed_symbol_nmse": 0.0531640462577343,
+        "channel_nmse_db": 69.44457354017966,
+        "observed_symbol_nmse_db": -12.743819727825962
+      }
+    },
+    {
+      "variant": "oracle_rel_delay",
+      "oracle_keys": [
+        "rel_delay_s"
+      ],
+      "final": {
+        "channel_nmse": 403.0412902832031,
+        "observed_symbol_nmse": 3.672446098335058e-07,
+        "channel_nmse_db": 26.053495404924128,
+        "observed_symbol_nmse_db": -64.3504338719592
+      }
+    },
+    {
+      "variant": "oracle_doppler",
+      "oracle_keys": [
+        "doppler_hz"
+      ],
+      "final": {
+        "channel_nmse": 0.016152778640389442,
+        "observed_symbol_nmse": 0.012942659668624401,
+        "channel_nmse_db": -17.917527584831745,
+        "observed_symbol_nmse_db": -18.879764685551798
+      }
+    },
+    {
+      "variant": "oracle_delay_stack",
+      "oracle_keys": [
+        "total_delay_s",
+        "rx_time_offsets_s",
+        "rel_delay_s"
+      ],
+      "final": {
+        "channel_nmse": 0.0004311579104978591,
+        "observed_symbol_nmse": 5.402581593899614e-13,
+        "channel_nmse_db": -33.65363640438124,
+        "observed_symbol_nmse_db": -118.12406481889431
+      }
+    },
+    {
+      "variant": "oracle_time_stack",
+      "oracle_keys": [
+        "cfo_hz",
+        "doppler_hz"
+      ],
+      "final": {
+        "channel_nmse": 0.013082165271043777,
+        "observed_symbol_nmse": 0.013082165271043777,
+        "channel_nmse_db": -18.833203685595624,
+        "observed_symbol_nmse_db": -18.833203685595624
+      }
+    },
+    {
+      "variant": "oracle_path_shape",
+      "oracle_keys": [
+        "rel_delay_s",
+        "doppler_hz"
+      ],
+      "final": {
+        "channel_nmse": 0.0031945600640028715,
+        "observed_symbol_nmse": 0.00010977705096593127,
+        "channel_nmse_db": -24.95588941729974,
+        "observed_symbol_nmse_db": -39.59488436262726
+      }
+    },
+    {
+      "variant": "oracle_all",
+      "oracle_keys": [
+        "total_delay_s",
+        "cfo_hz",
+        "rx_time_offsets_s",
+        "rel_delay_s",
+        "doppler_hz"
+      ],
+      "final": {
+        "channel_nmse": 1.7523627676967884e-14,
+        "observed_symbol_nmse": 1.7523627676967884e-14,
+        "channel_nmse_db": -119.92455497335581,
+        "observed_symbol_nmse_db": -119.92455497335581
+      }
+    }
+  ]
+}

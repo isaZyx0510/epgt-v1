@@ -1,0 +1,7 @@
+extends: base_common_delay.yaml
+experiment_name: e2_effective_paths
+channel:
+  max_doppler_hz: 0.0
+thesis_impairment:
+  cfo_range_hz: [0.0, 0.0]
+l_eff_values: [2, 4, 6, 8, 12]

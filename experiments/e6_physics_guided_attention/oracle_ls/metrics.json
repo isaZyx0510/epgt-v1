@@ -1,0 +1,16 @@
+{
+  "experiment": "e6_physics_guided_attention",
+  "method": "oracle_ls",
+  "config": {
+    "data_config": "configs/data/e1_clean_transformer.yaml",
+    "l_eff": 12
+  },
+  "history": [],
+  "final": {
+    "channel_nmse": 1.75144915795988e-14,
+    "observed_symbol_nmse": 1.75144915795988e-14,
+    "channel_nmse_db": -119.92459396777693,
+    "observed_symbol_nmse_db": -119.92459396777693
+  },
+  "variant": "oracle_ls"
+}

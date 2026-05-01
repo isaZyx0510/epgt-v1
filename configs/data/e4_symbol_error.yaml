@@ -1,0 +1,4 @@
+extends: base_common_delay.yaml
+experiment_name: e4_symbol_error
+ser_values: [0.0, 0.01, 0.05, 0.10, 0.20]
+

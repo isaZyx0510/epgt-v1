@@ -1,0 +1,95 @@
+[
+  {
+    "experiment": "e1_clean_transformer",
+    "method": "oracle_ls",
+    "history": [],
+    "final": {
+      "channel_nmse_db": -44.31883912852399,
+      "observed_symbol_nmse_db": -119.91751887057113
+    }
+  },
+  {
+    "experiment": "e1_clean_transformer",
+    "method": "hybrid",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.5614809393882751,
+        "param_loss": 0.5614809393882751,
+        "tau0_loss": 0.18775537610054016,
+        "cfo_loss": 0.04474090412259102,
+        "delay_loss": 0.22244735062122345,
+        "doppler_loss": 0.0717705711722374,
+        "rx_offset_loss": 0.03476675599813461,
+        "channel_nmse_db": 63.74527615187894,
+        "observed_symbol_nmse_db": -19.096580995418154
+      },
+      {
+        "step": 1,
+        "train_loss": 0.6459324359893799,
+        "param_loss": 0.6459324359893799,
+        "tau0_loss": 0.08337888866662979,
+        "cfo_loss": 0.2737998962402344,
+        "delay_loss": 0.1975170373916626,
+        "doppler_loss": 0.06951534003019333,
+        "rx_offset_loss": 0.021721264347434044,
+        "channel_nmse_db": 68.8486491910516,
+        "observed_symbol_nmse_db": -22.853301396999957
+      },
+      {
+        "step": 2,
+        "train_loss": 0.3307793438434601,
+        "param_loss": 0.3307793438434601,
+        "tau0_loss": 0.04976770654320717,
+        "cfo_loss": 0.01248064637184143,
+        "delay_loss": 0.17267052829265594,
+        "doppler_loss": 0.06843678653240204,
+        "rx_offset_loss": 0.027423687279224396,
+        "channel_nmse_db": 64.1692166774364,
+        "observed_symbol_nmse_db": -27.19321006305968
+      }
+    ],
+    "final": {
+      "step": 2,
+      "train_loss": 0.3307793438434601,
+      "param_loss": 0.3307793438434601,
+      "tau0_loss": 0.04976770654320717,
+      "cfo_loss": 0.01248064637184143,
+      "delay_loss": 0.17267052829265594,
+      "doppler_loss": 0.06843678653240204,
+      "rx_offset_loss": 0.027423687279224396,
+      "channel_nmse_db": 64.1692166774364,
+      "observed_symbol_nmse_db": -27.19321006305968
+    }
+  },
+  {
+    "experiment": "e1_clean_transformer",
+    "method": "direct_h",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.5191588401794434,
+        "channel_nmse_db": 0.032389109956842854,
+        "observed_symbol_nmse_db": 0.03283358704962802
+      },
+      {
+        "step": 1,
+        "train_loss": 0.5039110779762268,
+        "channel_nmse_db": -0.027350076527712926,
+        "observed_symbol_nmse_db": -0.028154559651850895
+      },
+      {
+        "step": 2,
+        "train_loss": 0.49683794379234314,
+        "channel_nmse_db": -0.08039296788673134,
+        "observed_symbol_nmse_db": -0.0838276489773617
+      }
+    ],
+    "final": {
+      "step": 2,
+      "train_loss": 0.49683794379234314,
+      "channel_nmse_db": -0.08039296788673134,
+      "observed_symbol_nmse_db": -0.0838276489773617
+    }
+  }
+]

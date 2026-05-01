@@ -1,0 +1,5 @@
+physics:
+  symbol_period_s: 1.0e-3
+  subcarrier_spacing_hz: 15000.0
+  coordinate_order: [k, n]
+

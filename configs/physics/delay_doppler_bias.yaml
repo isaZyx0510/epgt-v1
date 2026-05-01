@@ -1,0 +1,6 @@
+physics:
+  use_cross_attention_bias: true
+  bias_scale: 1.0
+  bias_eps: 1.0e-6
+  center_residual_doppler: true
+

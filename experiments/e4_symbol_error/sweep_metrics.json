@@ -1,0 +1,54 @@
+[
+  {
+    "experiment": "e4_symbol_error",
+    "method": "hybrid",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.6029987335205078,
+        "param_loss": 0.6029987335205078,
+        "tau0_loss": 0.23849332332611084,
+        "cfo_loss": 0.022609375417232513,
+        "delay_loss": 0.21884389221668243,
+        "doppler_loss": 0.07033408433198929,
+        "rx_offset_loss": 0.05271802097558975,
+        "channel_nmse_db": 77.47594623695021,
+        "observed_symbol_nmse_db": -5.835142286543253
+      }
+    ],
+    "final": {
+      "step": 0,
+      "train_loss": 0.6029987335205078,
+      "param_loss": 0.6029987335205078,
+      "tau0_loss": 0.23849332332611084,
+      "cfo_loss": 0.022609375417232513,
+      "delay_loss": 0.21884389221668243,
+      "doppler_loss": 0.07033408433198929,
+      "rx_offset_loss": 0.05271802097558975,
+      "channel_nmse_db": 77.47594623695021,
+      "observed_symbol_nmse_db": -5.835142286543253
+    },
+    "sweep_name": "ser",
+    "sweep_value": 0.05
+  },
+  {
+    "experiment": "e4_symbol_error",
+    "method": "direct_h",
+    "history": [
+      {
+        "step": 0,
+        "train_loss": 0.523306131362915,
+        "channel_nmse_db": 0.027739671729317163,
+        "observed_symbol_nmse_db": 0.03022311058284297
+      }
+    ],
+    "final": {
+      "step": 0,
+      "train_loss": 0.523306131362915,
+      "channel_nmse_db": 0.027739671729317163,
+      "observed_symbol_nmse_db": 0.03022311058284297
+    },
+    "sweep_name": "ser",
+    "sweep_value": 0.05
+  }
+]

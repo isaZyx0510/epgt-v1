@@ -1,0 +1,10 @@
+extends: base_common_delay.yaml
+experiment_name: e5_full_stress
+l_eff: 6
+thesis_impairment:
+  awgn_snr_db: 10.0
+observation:
+  input_symbol_indices: [6, 7]
+  symbol_error_rate: 0.10
+  include_reliability: true
+

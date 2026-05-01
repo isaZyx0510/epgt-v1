@@ -1,0 +1,8 @@
+extends: epgt_v1_base.yaml
+physics:
+  use_cross_attention_bias: false
+  use_reliability_mask: false
+  center_residual_doppler: true
+training:
+  path_gate_sparsity_weight: 1.0e-3
+

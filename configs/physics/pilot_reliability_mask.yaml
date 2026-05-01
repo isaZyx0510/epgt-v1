@@ -1,0 +1,4 @@
+physics:
+  use_reliability_mask: true
+  min_reliability: 0.5
+
