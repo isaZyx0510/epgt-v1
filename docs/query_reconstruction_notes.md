@@ -49,31 +49,31 @@ tokens
 原始 baseline：
 
 ```powershell
-uv run python scripts/train_hybrid.py --architecture original_v1 --loss-mode param
+uv run python scripts/train/train_hybrid.py --architecture original_v1 --loss-mode param
 ```
 
 改进版 reconstruction training：
 
 ```powershell
-uv run python scripts/train_hybrid.py --architecture query_v1 --loss-mode reconstruction --steps 100 --lr 1e-4
+uv run python scripts/train/train_hybrid.py --architecture query_v1 --loss-mode reconstruction --steps 100 --lr 1e-4
 ```
 
 使用 uncertainty weighted LS：
 
 ```powershell
-uv run python scripts/train_hybrid.py --architecture query_v1 --loss-mode param_plus_reconstruction --ls-mode learnable_weighted_ls --steps 100 --lr 1e-4
+uv run python scripts/train/train_hybrid.py --architecture query_v1 --loss-mode param_plus_reconstruction --ls-mode learnable_weighted_ls --steps 100 --lr 1e-4
 ```
 
 Two-stage training：
 
 ```powershell
-uv run python scripts/train_hybrid.py --architecture query_v1 --loss-mode two_stage --warmup-steps 80 --steps 160 --reconstruction-weight 0.05 --lr 1e-4
+uv run python scripts/train/train_hybrid.py --architecture query_v1 --loss-mode two_stage --warmup-steps 80 --steps 160 --reconstruction-weight 0.05 --lr 1e-4
 ```
 
 Reconstruction weight sweep：
 
 ```powershell
-uv run python scripts/run_two_stage_reconstruction_sweep.py --weights 0.01 0.05 0.1 0.5 --warmup-steps 80 --finetune-steps 80 --lr 1e-4
+uv run python scripts/train/train_hybrid.py --architecture query_v1 --loss-mode two_stage --warmup-steps 80 --steps 160 --reconstruction-weight 0.05 --lr 1e-4
 ```
 
 ## 当前 E1 clean 结果

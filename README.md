@@ -48,10 +48,15 @@ src/thesis_transformer_v1/
   tdlc/          TDL-C channel and OFDM utilities
 
 scripts/
-  train_hybrid.py           Generic hybrid training entry point
-  train_direct_h.py         Direct-H baseline training
-  run_*_sweep.py            Standard E1-E5 experiment scripts
-  pgt/                      EPGT-specific training, ablation, diagnostics
+  e0/                       E0 oracle LS sanity check
+  e1/                       E1 clean comparison
+  e2/                       E2 effective-path training scenarios
+  e3/                       E3 AWGN/SNR sweep
+  e4/                       E4 symbol-error sweep
+  e5/                       E5 full-stress comparison
+  e6/                       E6 EPGT comparison and diagnostics
+  train/                    Generic training entry points
+  tools/                    Dataset and plotting utilities
 
 docs/
   pgt/                      EPGT architecture notes, diagrams, slide assets
@@ -71,19 +76,19 @@ tests/
 EPGT H-loss quick run:
 
 ```powershell
-uv run --extra dev python scripts\pgt\train_pgt_h_loss.py --config configs\data\e6_h_loss_l5.yaml --model-config configs\model\pgt\epgt_v1_bias_only.yaml --steps 60 --eval-interval 20 --train-batches 4 --val-batches 2 --loss-mode reconstruction
+uv run --extra dev python scripts\e6\train_pgt_h_loss.py --config configs\data\e6_h_loss_l5.yaml --model-config configs\model\pgt\epgt_v1_bias_only.yaml --steps 60 --eval-interval 20 --train-batches 4 --val-batches 2 --loss-mode reconstruction
 ```
 
 EPGT uncertainty-weighted LS run:
 
 ```powershell
-uv run --extra dev python scripts\pgt\train_pgt_h_loss.py --config configs\data\e6_h_loss_l5.yaml --model-config configs\model\pgt\epgt_v1_uncertainty_ls.yaml --steps 200 --lr 1e-3 --eval-interval 20 --train-batches 4 --val-batches 2 --ls-mode learnable_weighted_ls --loss-mode reconstruction --uncertainty-regularization-weight 1e-4
+uv run --extra dev python scripts\e6\train_pgt_h_loss.py --config configs\data\e6_h_loss_l5.yaml --model-config configs\model\pgt\epgt_v1_uncertainty_ls.yaml --steps 200 --lr 1e-3 --eval-interval 20 --train-batches 4 --val-batches 2 --ls-mode learnable_weighted_ls --loss-mode reconstruction --uncertainty-regularization-weight 1e-4
 ```
 
 E6 comparison:
 
 ```powershell
-uv run --extra dev python scripts\pgt\run_e6_pgt_comparison.py --steps 25 --eval-interval 5 --train-batches 2 --val-batches 1 --d-model 32 --num-layers 1 --nhead 4 --dim-feedforward 64 --dropout 0.0
+uv run --extra dev python scripts\e6\run_e6_pgt_comparison.py --steps 25 --eval-interval 5 --train-batches 2 --val-batches 1 --d-model 32 --num-layers 1 --nhead 4 --dim-feedforward 64 --dropout 0.0
 ```
 
 Tests:

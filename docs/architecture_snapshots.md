@@ -32,7 +32,7 @@ tokens
 调用示例：
 
 ```powershell
-python scripts\run_e3_e5_pipeline.py --architecture original_v1
+python scripts\e3\run_snr_sweep.py --architecture original_v1
 ```
 
 ## `current`
@@ -48,4 +48,3 @@ src/thesis_transformer_v1/models/transformer.py
 - 当前工作架构。
 - 后续可以改为 query-based decoder、CLS token pooling、path queries 等新结构。
 - 修改后仍可与 `original_v1` 做公平对比。
-

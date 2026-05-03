@@ -74,7 +74,7 @@ L_eff = 2, 4, 6, 8, 12
 
 ```powershell
 $env:PYTHONPATH='F:\HUAWEI_Theise\Thesis Transformer version1\src'
-python scripts\run_e1_comparison.py `
+python scripts\e1\run_e1_comparison.py `
   --config configs\data\e1_clean_transformer.yaml `
   --steps 120 `
   --lr 1e-4 `
@@ -91,7 +91,7 @@ python scripts\run_e1_comparison.py `
 画图：
 
 ```powershell
-python scripts\plot_results.py `
+python scripts\tools\plot_results.py `
   --metrics experiments\e1_clean_transformer\stable_linear_comparison_metrics.json `
   --output experiments\e1_clean_transformer\stable_linear_comparison_nmse.png `
   --kind comparison `
@@ -116,7 +116,7 @@ python scripts\plot_results.py `
 
 ```powershell
 $env:PYTHONPATH='F:\HUAWEI_Theise\Thesis Transformer version1\src'
-python scripts\run_l_eff_sweep.py `
+python scripts\e2\run_e2_training_scenarios.py `
   --config configs\data\e2_effective_paths.yaml `
   --values 2 4 6 8 12 `
   --methods oracle_ls hybrid `
@@ -135,7 +135,7 @@ python scripts\run_l_eff_sweep.py `
 画图：
 
 ```powershell
-python scripts\plot_results.py `
+python scripts\tools\plot_results.py `
   --metrics experiments\e2_effective_paths\stable_linear_sweep_metrics.json `
   --output experiments\e2_effective_paths\stable_linear_nmse_vs_l_eff.png `
   --kind sweep `

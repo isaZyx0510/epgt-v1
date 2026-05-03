@@ -8,7 +8,7 @@ import torch
 from torch import nn
 
 
-@dataclass
+@dataclass   #参数容器
 class TransformerConfig:
     input_dim: int
     l_eff: int = 12
@@ -29,7 +29,7 @@ class TransformerConfig:
     predict_path_uncertainty: bool = False
 
 
-class TokenEncoder(nn.Module):
+class TokenEncoder(nn.Module):  #Transformer编码器 ，输入是tokens，输出是编码后的特征，baseline的编码器是mean-pooling style
     def __init__(self, config: TransformerConfig) -> None:
         super().__init__()
         self.input_proj = nn.Sequential(
@@ -51,7 +51,7 @@ class TokenEncoder(nn.Module):
         return encoded.mean(dim=1)
 
 
-class HybridTransformer(nn.Module):
+class HybridTransformer(nn.Module): #预测非线性参数，路径增益由LS恢复
     """Predict nonlinear parameters only; path gains are recovered by LS."""
 
     def __init__(self, config: TransformerConfig) -> None:
@@ -93,7 +93,7 @@ class HybridTransformer(nn.Module):
         }
 
 
-class DirectHTransformer(nn.Module):
+class DirectHTransformer(nn.Module): #黑盒baseline 直接回归全网格复数H作为黑盒基线
     """Directly regress full-grid complex H as a black-box baseline."""
 
     def __init__(self, config: TransformerConfig) -> None:
@@ -119,3 +119,4 @@ class DirectHTransformer(nn.Module):
             2,
         )
         return raw.reshape(shape)
+

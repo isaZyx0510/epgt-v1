@@ -106,7 +106,7 @@ def average_metric_rows(rows: list[dict[str, float]]) -> dict[str, float]:
             averaged[key] = values[0]
     return averaged
 
-
+#参数域损失
 def normalized_param_loss(
     outputs: dict[str, torch.Tensor],
     labels: dict[str, np.ndarray],
@@ -219,7 +219,7 @@ def reconstruction_loss_from_outputs(
     return full_loss, {
         "reconstruction_loss": float(full_loss.detach()),
         "observed_reconstruction_loss": float(observed_loss.detach()),
-    }
+    }  #full_loss (torch.Tensor): 全网格 NMSE。衡量整张 5D 时频网格上估计信道的准确性
 
 
 def train_hybrid_quick(

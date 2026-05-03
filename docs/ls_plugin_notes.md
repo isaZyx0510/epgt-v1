@@ -99,7 +99,8 @@ learnable_weighted_ls 作为实验插件
 
 ```powershell
 $env:PYTHONPATH='F:\HUAWEI_Theise\Thesis Transformer version1\src'
-python scripts\run_ls_plugin_comparison.py `
+python scripts\e2\run_e2_training_scenarios.py `
+  --scenarios uncertainty query_weighted epgt_weighted `
   --steps 40 `
   --eval-interval 20 `
   --train-batches 4 `
@@ -107,7 +108,7 @@ python scripts\run_ls_plugin_comparison.py `
   --d-model 64 `
   --num-layers 2 `
   --dim-feedforward 128 `
-  --output-root experiments\ls_plugin_comparison
+  --output experiments\e2_effective_paths\weighted_ls_comparison.json
 ```
 
 默认比较：
@@ -121,13 +122,12 @@ uncertainty_v1 + learnable_weighted_ls
 ## 6. E3-E5 使用 weighted LS
 
 ```powershell
-python scripts\run_e3_e5_pipeline.py `
+python scripts\e3\run_snr_sweep.py `
   --architecture uncertainty_v1 `
   --ls-mode learnable_weighted_ls `
   --steps 80 `
   --lr 1e-4 `
   --train-batches 8 `
   --val-batches 3 `
-  --output-root experiments\robustness_pipeline_weighted_ls
+  --output experiments\e3_awgn\weighted_ls_sweep_metrics.json
 ```
-

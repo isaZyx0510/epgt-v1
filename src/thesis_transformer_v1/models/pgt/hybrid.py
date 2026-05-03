@@ -1,5 +1,5 @@
 """EPGT-v1 hybrid model with effective-path guided cross-attention."""
-
+#主模型
 from __future__ import annotations
 
 import torch
