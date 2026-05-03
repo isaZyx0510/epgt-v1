@@ -168,6 +168,30 @@ def normalized_param_loss(
     return total, parts
 
 
+def path_uncertainty_regularization(
+    outputs: dict[str, torch.Tensor],
+    model_cfg: TransformerConfig,
+) -> tuple[torch.Tensor, dict[str, float]]:
+    """Lightly discourage path uncertainty from becoming extreme under H-only loss."""
+    device = outputs["rel_delay_s"].device
+    zero = torch.zeros((), device=device)
+    if "rel_delay_log_var" not in outputs or "doppler_log_var" not in outputs:
+        return zero, {}
+
+    delay_log_var = outputs["rel_delay_log_var"]
+    doppler_log_var = outputs["doppler_log_var"]
+    delay_log_scale = 2.0 * np.log(max(model_cfg.max_rel_delay_s, 1e-12))
+    doppler_log_scale = 2.0 * np.log(max(model_cfg.max_doppler_hz, 1e-6))
+    delay_norm_log_var = delay_log_var - float(delay_log_scale)
+    doppler_norm_log_var = doppler_log_var - float(doppler_log_scale)
+    loss = delay_norm_log_var.square().mean() + doppler_norm_log_var.square().mean()
+    return loss, {
+        "uncertainty_reg_loss": float(loss.detach()),
+        "rel_delay_log_var_mean": float(delay_log_var.mean().detach()),
+        "doppler_log_var_mean": float(doppler_log_var.mean().detach()),
+    }
+
+
 def reconstruction_loss_from_outputs(
     outputs: dict[str, torch.Tensor],
     data: dict[str, Any],
@@ -213,6 +237,7 @@ def train_hybrid_quick(
     reconstruction_weight: float = 1.0,
     warmup_steps: int = 0,
     finetune_loss_mode: str = "param_plus_reconstruction",
+    uncertainty_regularization_weight: float = 0.0,
 ) -> dict[str, Any]:
     if loss_mode not in {"param", "reconstruction", "param_plus_reconstruction", "two_stage"}:
         raise ValueError(
@@ -251,6 +276,7 @@ def train_hybrid_quick(
         param_loss: torch.Tensor | None = None
         param_parts: dict[str, float] = {}
         rec_parts: dict[str, float] = {}
+        uncertainty_reg_parts: dict[str, float] = {}
         if active_loss_mode in {"param", "param_plus_reconstruction"}:
             labels = nonlinear_oracle_params(data["channel_labels"], l_eff=cfg.l_eff)
             param_loss, param_parts = normalized_param_loss(outputs, labels, model_cfg)
@@ -275,6 +301,12 @@ def train_hybrid_quick(
                         "param_plus_reconstruction requires physical parameter labels"
                     )
                 loss = param_loss + float(reconstruction_weight) * rec_loss
+        uncertainty_reg, uncertainty_reg_parts = path_uncertainty_regularization(
+            outputs,
+            model_cfg,
+        )
+        if float(uncertainty_regularization_weight) > 0.0 and uncertainty_reg_parts:
+            loss = loss + float(uncertainty_regularization_weight) * uncertainty_reg
         loss.backward()
         optimizer.step()
 
@@ -286,8 +318,10 @@ def train_hybrid_quick(
             "stage": stage,
             "warmup_steps": warmup_steps,
             "reconstruction_weight": reconstruction_weight,
+            "uncertainty_regularization_weight": uncertainty_regularization_weight,
             **param_parts,
             **rec_parts,
+            **uncertainty_reg_parts,
         }
         if param_loss is not None:
             row["param_loss"] = float(param_loss.detach())

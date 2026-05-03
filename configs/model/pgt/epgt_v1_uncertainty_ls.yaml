@@ -1,0 +1,8 @@
+extends: epgt_v1_base.yaml
+model:
+  predict_path_uncertainty: true
+physics:
+  use_cross_attention_bias: true
+  use_reliability_mask: false
+  center_residual_doppler: true
+  bias_scale: 1.0

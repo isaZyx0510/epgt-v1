@@ -13,12 +13,12 @@ from thesis_transformer_v1.tdlc.config import deep_merge, load_mapping
 class EPGTGuidanceConfig:
     """Physics-control knobs for EPGT-v1."""
 
-    use_cross_attention_bias: bool = True
-    use_reliability_mask: bool = False
-    center_residual_doppler: bool = True
-    bias_scale: float = 1.0
+    use_cross_attention_bias: bool = True  #是否在cross attention中使用bias
+    use_reliability_mask: bool = False #是否根据 token reliability 做 attention mask
+    center_residual_doppler: bool = True #是否将残差多普勒中心化到0 Hz
+    bias_scale: float = 1.0 #缩放 cross attention bias 的系数，较大的值会更强地引导模型关注物理先验
     bias_eps: float = 1.0e-6
-    min_reliability: float = 0.0
+    min_reliability: float = 0.0  #可靠性掩码的最小值，较大的值会更强地抑制不可靠 token 的影响
     symbol_period_s: float = 1.0e-3
     subcarrier_spacing_hz: float = 15_000.0
 

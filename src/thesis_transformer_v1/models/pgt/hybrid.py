@@ -35,6 +35,7 @@ class EPGTHybridTransformer(nn.Module):
         self.path_head = EffectivePathHead(
             config,
             center_doppler_values=self.guidance.center_residual_doppler,
+            predict_uncertainty=config.predict_path_uncertainty,
         )
         self.cross_attention = GuidedCrossAttention(config.d_model, config.nhead, config.dropout)
         self.refine_norm = nn.LayerNorm(config.d_model)

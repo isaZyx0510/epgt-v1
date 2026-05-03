@@ -100,6 +100,7 @@ def main() -> None:
         default="reconstruction",
     )
     parser.add_argument("--reconstruction-weight", type=float, default=1.0)
+    parser.add_argument("--uncertainty-regularization-weight", type=float, default=0.0)
     parser.add_argument("--warmup-steps", type=int, default=0)
     parser.add_argument(
         "--finetune-loss-mode",
@@ -151,6 +152,7 @@ def main() -> None:
         reconstruction_weight=args.reconstruction_weight,
         warmup_steps=args.warmup_steps,
         finetune_loss_mode=args.finetune_loss_mode,
+        uncertainty_regularization_weight=args.uncertainty_regularization_weight,
     )
     rows.append(
         row_from_result(
@@ -166,6 +168,7 @@ def main() -> None:
                 "l_eff": cfg.l_eff,
                 "loss_mode": args.loss_mode,
                 "reconstruction_weight": args.reconstruction_weight,
+                "uncertainty_regularization_weight": args.uncertainty_regularization_weight,
                 "warmup_steps": args.warmup_steps,
                 "finetune_loss_mode": args.finetune_loss_mode,
             },
@@ -190,6 +193,7 @@ def main() -> None:
             reconstruction_weight=args.reconstruction_weight,
             warmup_steps=args.warmup_steps,
             finetune_loss_mode=args.finetune_loss_mode,
+            uncertainty_regularization_weight=args.uncertainty_regularization_weight,
         )
         rows.append(
             row_from_result(
@@ -206,6 +210,7 @@ def main() -> None:
                     "l_eff": cfg.l_eff,
                     "loss_mode": args.loss_mode,
                     "reconstruction_weight": args.reconstruction_weight,
+                    "uncertainty_regularization_weight": args.uncertainty_regularization_weight,
                     "warmup_steps": args.warmup_steps,
                     "finetune_loss_mode": args.finetune_loss_mode,
                 },

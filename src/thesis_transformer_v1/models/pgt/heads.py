@@ -38,32 +38,57 @@ class GlobalParameterHead(nn.Module):
 
 
 class EffectivePathHead(nn.Module):
-    """Predict effective-path gates, delays, and residual Dopplers."""
+    """Predict effective-path gates, delays, residual Dopplers, and optional uncertainty."""
 
-    def __init__(self, config: TransformerConfig, *, center_doppler_values: bool = True) -> None:
+    def __init__(
+        self,
+        config: TransformerConfig,
+        *,
+        center_doppler_values: bool = True,
+        predict_uncertainty: bool = False,
+    ) -> None:
         super().__init__()
         self.config = config
         self.center_doppler_values = center_doppler_values
+        self.predict_uncertainty = predict_uncertainty
+        values_per_path = 5 if predict_uncertainty else 3
         self.head = nn.Sequential(
             nn.Linear(config.d_model, config.dim_feedforward),
             nn.GELU(),
             nn.Dropout(config.dropout),
-            nn.Linear(config.dim_feedforward, 3 * config.l_eff),
+            nn.Linear(config.dim_feedforward, values_per_path * config.l_eff),
         )
 
     def forward(self, state: torch.Tensor) -> dict[str, torch.Tensor]:
-        raw = self.head(state).reshape(-1, self.config.l_eff, 3)
+        values_per_path = 5 if self.predict_uncertainty else 3
+        raw = self.head(state).reshape(-1, self.config.l_eff, values_per_path)
         path_gates = torch.sigmoid(raw[..., 0])
         rel_delay_s = torch.sigmoid(raw[..., 1]) * self.config.max_rel_delay_s
         doppler_hz = torch.tanh(raw[..., 2]) * self.config.max_doppler_hz
+        rel_delay_log_var = None
+        doppler_log_var = None
+        if self.predict_uncertainty:
+            rel_delay_var = (
+                torch.nn.functional.softplus(raw[..., 3])
+                * max(self.config.max_rel_delay_s, 1e-12) ** 2
+            )
+            doppler_var = (
+                torch.nn.functional.softplus(raw[..., 4])
+                * max(self.config.max_doppler_hz, 1e-6) ** 2
+            )
+            rel_delay_log_var = torch.log(rel_delay_var.clamp_min(1e-30))
+            doppler_log_var = torch.log(doppler_var.clamp_min(1e-30))
         if self.center_doppler_values:
             doppler_hz = center_doppler(doppler_hz, path_gates)
         rel_delay_s, order = torch.sort(rel_delay_s, dim=1)
         doppler_hz = torch.gather(doppler_hz, 1, order)
         path_gates = torch.gather(path_gates, 1, order)
-        return {
+        outputs = {
             "path_gates": path_gates,
             "rel_delay_s": rel_delay_s,
             "doppler_hz": doppler_hz,
         }
-
+        if rel_delay_log_var is not None and doppler_log_var is not None:
+            outputs["rel_delay_log_var"] = torch.gather(rel_delay_log_var, 1, order)
+            outputs["doppler_log_var"] = torch.gather(doppler_log_var, 1, order)
+        return outputs

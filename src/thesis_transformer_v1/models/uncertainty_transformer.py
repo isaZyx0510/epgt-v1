@@ -8,7 +8,7 @@ from torch import nn
 from thesis_transformer_v1.models.transformer import TokenEncoder, TransformerConfig
 
 
-class UncertaintyHybridTransformer(nn.Module):
+class UncertaintyHybridTransformer(nn.Module):  #带有不确定度的hybird Transformer，预测非线性参数和不确定度估计，路径增益由加权LS恢复
     """Predict nonlinear parameters plus diagonal uncertainty estimates.
 
     This keeps the original mean-pooling encoder style while adding uncertainty
@@ -18,7 +18,7 @@ class UncertaintyHybridTransformer(nn.Module):
     def __init__(self, config: TransformerConfig) -> None:
         super().__init__()
         self.config = config
-        self.encoder = TokenEncoder(config)
+        self.encoder = TokenEncoder(config) #复用transformer里面的额编码器，是mean-pooling style
         out_dim = 2 + 2 * config.l_eff + config.n_rx + 2 * config.l_eff
         self.head = nn.Sequential(
             nn.Linear(config.d_model, config.dim_feedforward),

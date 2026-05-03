@@ -1,0 +1,27 @@
+{
+  "metrics": "experiments\\e6_h_loss_l5_ls_comparison\\metrics.json",
+  "plot": "experiments\\e6_h_loss_l5_ls_comparison\\comparison_nmse.png",
+  "rows": [
+    {
+      "method": "original_v1_traditional_ls",
+      "channel_nmse": 2.565910577774048,
+      "observed_symbol_nmse": 0.20097953081130981,
+      "ls_mode": "traditional_ls",
+      "weights_source": null
+    },
+    {
+      "method": "uncertainty_v1_traditional_ls",
+      "channel_nmse": 1.4395541548728943,
+      "observed_symbol_nmse": 0.24273990839719772,
+      "ls_mode": "traditional_ls",
+      "weights_source": null
+    },
+    {
+      "method": "uncertainty_v1_weighted_ls",
+      "channel_nmse": 3.342375159263611,
+      "observed_symbol_nmse": 0.2536865621805191,
+      "ls_mode": "learnable_weighted_ls",
+      "weights_source": "uncertainty"
+    }
+  ]
+}

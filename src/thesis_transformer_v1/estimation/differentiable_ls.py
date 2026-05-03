@@ -64,7 +64,7 @@ def reconstruct_channel_torch(
 
 def uncertainty_observation_weights_torch(
     params: dict[str, torch.Tensor],
-    observation_indices: np.ndarray,
+    observation_indices: np.ndarray, #
     freq_hz: np.ndarray | torch.Tensor,
     time_s: np.ndarray | torch.Tensor,
     eps: float = 1e-8,
@@ -73,12 +73,12 @@ def uncertainty_observation_weights_torch(
 ) -> torch.Tensor:
     """Return [B, N_obs] weights from predicted delay/Doppler uncertainty."""
     device = params["rel_delay_s"].device
-    bsz = params["rel_delay_s"].shape[0]
-    n_obs = observation_indices.shape[0]
+    bsz = params["rel_delay_s"].shape[0] 
+    n_obs = observation_indices.shape[0] #
     if "rel_delay_log_var" not in params or "doppler_log_var" not in params:
         return torch.ones((bsz, n_obs), dtype=torch.float32, device=device)
 
-    delay_var = torch.exp(params["rel_delay_log_var"].to(torch.float32))
+    delay_var = torch.exp(params["rel_delay_log_var"].to(torch.float32)) #对数方差转为方差
     doppler_var = torch.exp(params["doppler_log_var"].to(torch.float32))
     freq = _float_tensor(freq_hz, device)
     time = _float_tensor(time_s, device)
@@ -89,12 +89,13 @@ def uncertainty_observation_weights_torch(
     phase_var = (
         (2.0 * torch.pi * freq_obs).square() * delay_var[:, :, None]
         + (2.0 * torch.pi * time_obs).square() * doppler_var[:, :, None]
-    )
+    )#算每个观测点 $(k, n)$ 在每条路径上产生的相位方差
     obs_var = phase_var.mean(dim=1)
     obs_scale = obs_var.mean(dim=1, keepdim=True).clamp_min(eps)
-    weights = 1.0 / (1.0 + obs_var / obs_scale)
-    weights = weights / weights.mean(dim=1, keepdim=True).clamp_min(eps)
-    return weights.clamp(min_weight, max_weight).to(torch.float32)
+    weights = 1.0 / (1.0 + obs_var / obs_scale)  #根据相位不确定度计算权重，较大的相位方差会导致较小的权重，从而在 LS 中减少该观测点的影响
+    weights = weights / weights.mean(dim=1, keepdim=True).clamp_min(eps) #归一化权重，使得每个样本的平均权重为 1.0，避免整体权重过大或过小
+    return weights.clamp(min_weight, max_weight).to(torch.float32) #对角矩阵，每个观测点的权重在 [min_weight, max_weight] 范围内，对A矩阵的每一行进行缩放
+                                                                    # 维度和观测点数Nobs相同，每个元素代表一个观测点的之心成都
 
 
 def recover_path_gains_lstsq_torch(

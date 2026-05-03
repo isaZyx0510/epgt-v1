@@ -26,6 +26,7 @@ class TransformerConfig:
     max_total_delay_s: float = 1.0e-6
     max_cfo_hz: float = 500.0
     max_rx_time_offset_s: float = 200.0e-9
+    predict_path_uncertainty: bool = False
 
 
 class TokenEncoder(nn.Module):
@@ -118,4 +119,3 @@ class DirectHTransformer(nn.Module):
             2,
         )
         return raw.reshape(shape)
-

@@ -23,3 +23,23 @@ def test_epgt_v1_factory_forward_shapes() -> None:
     assert torch.all(outputs["path_gates"] >= 0.0)
     assert torch.all(outputs["path_gates"] <= 1.0)
 
+
+def test_epgt_v1_optional_path_uncertainty_shapes() -> None:
+    tokens = torch.zeros((2, 96, 19), dtype=torch.float32)
+    coord_start = 2 * 4 + 2 * 4
+    tokens[..., coord_start] = torch.linspace(-1.0, 1.0, 96)
+    tokens[..., coord_start + 1] = torch.repeat_interleave(torch.tensor([-1.0, 1.0]), 48)
+    cfg = TransformerConfig(
+        input_dim=19,
+        l_eff=5,
+        n_rx=4,
+        n_tx=4,
+        n_sym=8,
+        n_sc=48,
+        predict_path_uncertainty=True,
+    )
+    outputs = build_hybrid_transformer(cfg, architecture="epgt_v1")(tokens)
+    assert outputs["rel_delay_log_var"].shape == (2, 5)
+    assert outputs["doppler_log_var"].shape == (2, 5)
+    assert torch.isfinite(outputs["rel_delay_log_var"]).all()
+    assert torch.isfinite(outputs["doppler_log_var"]).all()

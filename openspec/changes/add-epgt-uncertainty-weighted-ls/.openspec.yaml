@@ -1,0 +1,4 @@
+status: implemented
+created: 2026-05-03
+owner: thesis-transformer-v1
+summary: 为 EPGT-v1 增加 path-level uncertainty 输出，使 learnable weighted LS 真正生效。

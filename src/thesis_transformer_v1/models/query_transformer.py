@@ -1,5 +1,5 @@
 """Query-based hybrid Transformer for reconstruction-driven training."""
-
+#不再对所有 token 做 mean pooling，而是保留 token 序列，再用 learned queries 去 cross-attend。
 from __future__ import annotations
 
 import torch
