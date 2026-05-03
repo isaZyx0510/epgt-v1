@@ -106,6 +106,27 @@ def average_metric_rows(rows: list[dict[str, float]]) -> dict[str, float]:
             averaged[key] = values[0]
     return averaged
 
+
+def _resolve_device(device: str | torch.device | None = None) -> torch.device:
+    if device is None or str(device) == "auto":
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return torch.device(device)
+
+
+def _model_summary(
+    model: torch.nn.Module,
+    model_cfg: TransformerConfig,
+    device: torch.device,
+) -> dict[str, Any]:
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total = sum(p.numel() for p in model.parameters())
+    return {
+        "model_cfg": dict(model_cfg.__dict__),
+        "parameter_count": int(total),
+        "trainable_parameter_count": int(trainable),
+        "device": str(device),
+    }
+
 #参数域损失
 def normalized_param_loss(
     outputs: dict[str, torch.Tensor],
@@ -222,6 +243,19 @@ def reconstruction_loss_from_outputs(
     }  #full_loss (torch.Tensor): 全网格 NMSE。衡量整张 5D 时频网格上估计信道的准确性
 
 
+def validation_param_loss_from_outputs(
+    outputs: dict[str, torch.Tensor],
+    data: dict[str, Any],
+    cfg: ExperimentConfig,
+    model_cfg: TransformerConfig,
+) -> dict[str, float]:
+    labels = nonlinear_oracle_params(data["channel_labels"], l_eff=cfg.l_eff)
+    loss, parts = normalized_param_loss(outputs, labels, model_cfg)
+    metrics = {"val_param_loss": float(loss.detach())}
+    metrics.update({f"val_{key}": value for key, value in parts.items()})
+    return metrics
+
+
 def train_hybrid_quick(
     cfg: ExperimentConfig,
     steps: int = 25,
@@ -238,6 +272,7 @@ def train_hybrid_quick(
     warmup_steps: int = 0,
     finetune_loss_mode: str = "param_plus_reconstruction",
     uncertainty_regularization_weight: float = 0.0,
+    device: str | torch.device | None = None,
 ) -> dict[str, Any]:
     if loss_mode not in {"param", "reconstruction", "param_plus_reconstruction", "two_stage"}:
         raise ValueError(
@@ -256,6 +291,8 @@ def train_hybrid_quick(
     _first_data, _first_obs, first_tokens = train_data[0]
     model_cfg = model_config_from_tokens(cfg, first_tokens, model_overrides=model_overrides)
     model = build_hybrid_transformer(model_cfg, architecture=architecture, guidance=guidance)
+    train_device = _resolve_device(device)
+    model.to(train_device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
     history: list[dict[str, Any]] = []
 
@@ -272,6 +309,7 @@ def train_hybrid_quick(
                 stage = "finetune"
 
         optimizer.zero_grad(set_to_none=True)
+        tokens = tokens.to(train_device)
         outputs = model(tokens)
         param_loss: torch.Tensor | None = None
         param_parts: dict[str, float] = {}
@@ -329,10 +367,19 @@ def train_hybrid_quick(
         should_eval = should_eval or (eval_interval > 0 and (step + 1) % eval_interval == 0)
         if should_eval:
             eval_rows = []
+            param_eval_rows = []
             for val_batch in val_data:
                 val_sample, val_obs, val_tokens = val_batch
                 with torch.no_grad():
-                    eval_outputs = model(val_tokens)
+                    eval_outputs = model(val_tokens.to(train_device))
+                    param_eval_rows.append(
+                        validation_param_loss_from_outputs(
+                            eval_outputs,
+                            val_sample,
+                            cfg,
+                            model_cfg,
+                        )
+                    )
                 params = torch_params_to_numpy(eval_outputs)
                 eval_rows.append(
                     evaluate_hybrid_params(
@@ -347,6 +394,7 @@ def train_hybrid_quick(
             eval_metrics = average_metric_rows(eval_rows)
             row.update(eval_metrics)
             row.update({f"val_{key}": value for key, value in eval_metrics.items()})
+            row.update(average_metric_rows(param_eval_rows))
         history.append(row)
 
     final = history[-1].copy()
@@ -354,7 +402,7 @@ def train_hybrid_quick(
         eval_rows = []
         for val_sample, val_obs, val_tokens in val_data:
             with torch.no_grad():
-                params = torch_params_to_numpy(model(val_tokens))
+                params = torch_params_to_numpy(model(val_tokens.to(train_device)))
             eval_rows.append(
                 evaluate_hybrid_params(
                     params,
@@ -366,7 +414,11 @@ def train_hybrid_quick(
                 )
             )
         final.update(average_metric_rows(eval_rows))
-    return {"history": history, "final": final}
+    return {
+        "history": history,
+        "final": final,
+        "model": _model_summary(model, model_cfg, train_device),
+    }
 
 
 def train_direct_h_quick(
@@ -378,14 +430,15 @@ def train_direct_h_quick(
     val_batches: int = 1,
     model_overrides: dict[str, Any] | None = None,
     architecture: str = "current",
+    device: str | torch.device | None = None,
 ) -> dict[str, Any]:
     train_data = prepare_batches(cfg, max(1, train_batches), seed_offset=0)
     val_data = prepare_batches(cfg, max(1, val_batches), seed_offset=10_000)
     _first_data, _first_obs, first_tokens = train_data[0]
-    model = build_direct_h_transformer(
-        model_config_from_tokens(cfg, first_tokens, model_overrides=model_overrides),
-        architecture=architecture,
-    )
+    model_cfg = model_config_from_tokens(cfg, first_tokens, model_overrides=model_overrides)
+    model = build_direct_h_transformer(model_cfg, architecture=architecture)
+    train_device = _resolve_device(device)
+    model.to(train_device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
     history: list[dict[str, Any]] = []
 
@@ -395,6 +448,8 @@ def train_direct_h_quick(
             np.stack([data["h_freq"].real, data["h_freq"].imag], axis=-1).astype("float32")
         )
         optimizer.zero_grad(set_to_none=True)
+        tokens = tokens.to(train_device)
+        target = target.to(train_device)
         pred = model(tokens)
         loss = F.mse_loss(pred, target)
         loss.backward()
@@ -411,7 +466,7 @@ def train_direct_h_quick(
                 with torch.no_grad():
                     eval_rows.append(
                         evaluate_direct_h_tensor(
-                            model(val_tokens),
+                            model(val_tokens.to(train_device)),
                             val_sample["h_freq"],
                             observed_symbol_indices=cfg.observation.input_symbol_indices,
                         )
@@ -421,4 +476,8 @@ def train_direct_h_quick(
             row.update({f"val_{key}": value for key, value in eval_metrics.items()})
         history.append(row)
     final = history[-1].copy()
-    return {"history": history, "final": final}
+    return {
+        "history": history,
+        "final": final,
+        "model": _model_summary(model, model_cfg, train_device),
+    }

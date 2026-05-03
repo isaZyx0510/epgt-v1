@@ -1,0 +1,49 @@
+# E2 Summary
+
+| l_eff | scenario | variant | ls_mode | channel_nmse | channel_nmse_db | observed_symbol_nmse | observed_symbol_nmse_db | train_loss_final | validation_loss_final | weights_source | weights_min | weights_max | parameter_count |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | oracle | oracle_ls | traditional_ls | 4.080275e-06 | -5.389310e+01 | 4.080275e-06 | -5.389310e+01 |  | 4.080275e-06 |  |  |  |  |
+| 2 | hybrid | hybrid_original_v1_traditional_ls | traditional_ls | 7.712540e-01 | -1.128550e+00 | 7.678618e-01 | -1.147691e+00 | 7.765861e-01 | 7.712540e-01 |  |  |  | 1.723300e+05 |
+| 2 | uncertainty_traditional | uncertainty_v1_traditional_ls | traditional_ls | 1.333790e-02 | -1.887428e+01 | 3.271346e-03 | -2.489387e+01 | 1.158888e-02 | 1.333790e-02 |  |  |  | 1.731020e+05 |
+| 2 | uncertainty_weighted | uncertainty_v1_weighted_ls | learnable_weighted_ls | 1.059490e+00 | 2.503274e-01 | 1.056665e+00 | 2.387024e-01 | 1.050444e+00 | 1.059490e+00 | uncertainty | 5.000000e-01 | 1.625424e+00 | 1.731020e+05 |
+| 2 | query | query_v1_traditional_ls | traditional_ls | 7.809270e-02 | -1.108452e+01 | 6.960929e-02 | -1.158588e+01 | 8.050352e-02 | 7.809270e-02 |  |  |  | 4.341190e+05 |
+| 2 | query_weighted | query_v1_weighted_ls | learnable_weighted_ls | 2.934607e-01 | -5.328208e+00 | 2.838047e-01 | -5.473393e+00 | 3.253777e-01 | 2.934607e-01 | uncertainty | 5.000000e-01 | 1.626909e+00 | 4.341190e+05 |
+| 2 | epgt | epgt_v1_full_traditional_ls | traditional_ls | 5.347198e-02 | -1.273885e+01 | 4.347361e-02 | -1.363493e+01 | 5.376226e-02 | 5.347198e-02 |  |  |  | 2.293560e+05 |
+| 2 | epgt_weighted | epgt_v1_uncertainty_weighted_ls | learnable_weighted_ls | 1.049753e+00 | 2.107450e-01 | 1.048184e+00 | 2.042478e-01 | 1.048209e+00 | 1.049753e+00 | uncertainty | 5.000000e-01 | 1.586275e+00 | 2.301280e+05 |
+| 2 | direct_h | direct_h_original_v1 | none | 9.901656e-01 | -4.292633e-02 | 9.898825e-01 | -4.416883e-02 | 4.952340e-01 | 9.901656e-01 |  |  |  | 2.541984e+06 |
+| 4 | oracle | oracle_ls | traditional_ls | 1.719429e-10 | -9.762097e+01 | 1.719429e-10 | -9.762097e+01 |  | 1.719429e-10 |  |  |  |  |
+| 4 | hybrid | hybrid_original_v1_traditional_ls | traditional_ls | 1.363203e+00 | 1.337659e+00 | 6.355153e-01 | -1.969870e+00 | 1.452243e+00 | 1.363203e+00 |  |  |  | 1.731020e+05 |
+| 4 | uncertainty_traditional | uncertainty_v1_traditional_ls | traditional_ls | 2.193884e+01 | 8.890436e+00 | 6.138935e-01 | -2.122050e+00 | 4.913831e+00 | 2.193884e+01 |  |  |  | 1.746460e+05 |
+| 4 | uncertainty_weighted | uncertainty_v1_weighted_ls | learnable_weighted_ls | 1.232132e+00 | 8.419510e-01 | 6.717832e-01 | -1.729100e+00 | 1.176920e+00 | 1.232132e+00 | uncertainty | 5.000000e-01 | 1.628598e+00 | 1.746460e+05 |
+| 4 | query | query_v1_traditional_ls | traditional_ls | 2.035176e+00 | 3.076236e+00 | 6.819023e-01 | -1.663282e+00 | 2.357902e+00 | 2.035176e+00 |  |  |  | 4.343110e+05 |
+| 4 | query_weighted | query_v1_weighted_ls | learnable_weighted_ls | 8.399338e-01 | -7.729693e-01 | 3.874949e-01 | -4.123732e+00 | 7.953860e-01 | 8.399338e-01 | uncertainty | 5.000000e-01 | 1.635226e+00 | 4.343110e+05 |
+| 4 | epgt | epgt_v1_full_traditional_ls | traditional_ls | 1.283748e+00 | 1.070939e+00 | 5.006264e-01 | -3.006407e+00 | 1.294547e+00 | 1.283748e+00 |  |  |  | 2.305140e+05 |
+| 4 | epgt_weighted | epgt_v1_uncertainty_weighted_ls | learnable_weighted_ls | 2.422317e-01 | -6.179774e+00 | 1.251071e-01 | -9.035776e+00 | 2.771936e-01 | 2.422317e-01 | uncertainty | 5.000000e-01 | 1.632369e+00 | 2.320580e+05 |
+| 4 | direct_h | direct_h_original_v1 | none | 9.928947e-01 | -3.097249e-02 | 9.929322e-01 | -3.080825e-02 | 4.966022e-01 | 9.928947e-01 |  |  |  | 2.541984e+06 |
+| 6 | oracle | oracle_ls | traditional_ls | 1.780487e-10 | -9.747029e+01 | 1.780487e-10 | -9.747029e+01 |  | 1.780487e-10 |  |  |  |  |
+| 6 | hybrid | hybrid_original_v1_traditional_ls | traditional_ls | 6.998273e+00 | 7.954372e+00 | 2.747239e-01 | -5.618926e+00 | 8.651916e+00 | 6.998273e+00 |  |  |  | 1.738740e+05 |
+| 6 | uncertainty_traditional | uncertainty_v1_traditional_ls | traditional_ls | 1.074292e+02 | 1.886982e+01 | 3.542194e-01 | -4.525141e+00 | 2.958185e+02 | 1.074292e+02 |  |  |  | 1.761900e+05 |
+| 6 | uncertainty_weighted | uncertainty_v1_weighted_ls | learnable_weighted_ls | 2.500476e+02 | 2.235328e+01 | 4.065359e-01 | -3.912062e+00 | 1.304896e+02 | 2.500476e+02 | uncertainty | 5.000000e-01 | 1.631644e+00 | 1.761900e+05 |
+| 6 | query | query_v1_traditional_ls | traditional_ls | 2.582284e+01 | 1.342914e+01 | 2.585196e-01 | -5.890058e+00 | 3.664510e+01 | 2.582284e+01 |  |  |  | 4.345030e+05 |
+| 6 | query_weighted | query_v1_weighted_ls | learnable_weighted_ls | 8.032419e+01 | 1.656133e+01 | 2.372168e-02 | -1.636802e+01 | 8.488818e+00 | 8.032419e+01 | uncertainty | 5.000000e-01 | 1.628959e+00 | 4.345030e+05 |
+| 6 | epgt | epgt_v1_full_traditional_ls | traditional_ls | 2.044097e+02 | 7.030236e+00 | 1.025031e-01 | -9.909119e+00 | 4.748730e+00 | 2.044097e+02 |  |  |  | 2.316720e+05 |
+| 6 | epgt_weighted | epgt_v1_uncertainty_weighted_ls | learnable_weighted_ls | 4.148972e+01 | 1.456858e+01 | 3.195965e-01 | -4.959353e+00 | 6.078547e+00 | 4.148972e+01 | uncertainty | 5.000000e-01 | 1.632670e+00 | 2.339880e+05 |
+| 6 | direct_h | direct_h_original_v1 | none | 9.909610e-01 | -3.943656e-02 | 9.914459e-01 | -3.731160e-02 | 4.951955e-01 | 9.909610e-01 |  |  |  | 2.541984e+06 |
+| 8 | oracle | oracle_ls | traditional_ls | 1.441342e-14 | -1.199379e+02 | 1.441342e-14 | -1.199379e+02 |  | 1.441342e-14 |  |  |  |  |
+| 8 | hybrid | hybrid_original_v1_traditional_ls | traditional_ls | 4.004693e+05 | 5.429491e+01 | 1.037816e-01 | -9.877908e+00 | 1.291465e+03 | 4.004693e+05 |  |  |  | 1.746460e+05 |
+| 8 | uncertainty_traditional | uncertainty_v1_traditional_ls | traditional_ls | 6.538259e+05 | 5.419906e+01 | 7.032979e-02 | -1.158367e+01 | 2.843225e+01 | 6.538259e+05 |  |  |  | 1.777340e+05 |
+| 8 | uncertainty_weighted | uncertainty_v1_weighted_ls | learnable_weighted_ls | 3.973257e+01 | 1.545232e+01 | 7.465046e-01 | -1.619773e+00 | 1.352116e+02 | 3.973257e+01 | uncertainty | 5.000000e-01 | 1.630526e+00 | 1.777340e+05 |
+| 8 | query | query_v1_traditional_ls | traditional_ls | 1.304162e+05 | 4.246191e+01 | 2.311867e-02 | -1.641089e+01 | 1.063494e+03 | 1.304162e+05 |  |  |  | 4.346950e+05 |
+| 8 | query_weighted | query_v1_weighted_ls | learnable_weighted_ls | 3.724326e+02 | 2.558099e+01 | 8.749752e-02 | -1.108902e+01 | 1.124157e+03 | 3.724326e+02 | uncertainty | 5.000000e-01 | 1.635094e+00 | 4.346950e+05 |
+| 8 | epgt | epgt_v1_full_traditional_ls | traditional_ls | 2.171399e+02 | 2.289842e+01 | 4.838359e-02 | -1.317563e+01 | 1.014180e+02 | 2.171399e+02 |  |  |  | 2.328300e+05 |
+| 8 | epgt_weighted | epgt_v1_uncertainty_weighted_ls | learnable_weighted_ls | 9.426072e+02 | 2.810003e+01 | 6.340207e-02 | -1.212552e+01 | 4.102905e+02 | 9.426072e+02 | uncertainty | 5.000000e-01 | 1.631925e+00 | 2.359180e+05 |
+| 8 | direct_h | direct_h_original_v1 | none | 9.897798e-01 | -4.462437e-02 | 9.899272e-01 | -4.398078e-02 | 4.950320e-01 | 9.897798e-01 |  |  |  | 2.541984e+06 |
+| 12 | oracle | oracle_ls | traditional_ls | 1.751449e-14 | -1.199246e+02 | 1.751449e-14 | -1.199246e+02 |  | 1.751449e-14 |  |  |  |  |
+| 12 | hybrid | hybrid_original_v1_traditional_ls | traditional_ls | 5.916452e+06 | 6.740379e+01 | 2.839880e-02 | -1.548051e+01 | 5.347414e+02 | 5.916452e+06 |  |  |  | 1.761900e+05 |
+| 12 | uncertainty_traditional | uncertainty_v1_traditional_ls | traditional_ls | 4.772475e+06 | 6.638962e+01 | 1.184897e-02 | -1.933111e+01 | 3.099243e+02 | 4.772475e+06 |  |  |  | 1.808220e+05 |
+| 12 | uncertainty_weighted | uncertainty_v1_weighted_ls | learnable_weighted_ls | 1.673422e+02 | 2.173058e+01 | 3.507949e-01 | -4.688035e+00 | 7.119268e+02 | 1.673422e+02 | uncertainty | 5.000000e-01 | 1.632472e+00 | 1.808220e+05 |
+| 12 | query | query_v1_traditional_ls | traditional_ls | 1.371856e+06 | 6.124597e+01 | 9.064111e-03 | -2.044245e+01 | 4.783265e+02 | 1.371856e+06 |  |  |  | 4.350790e+05 |
+| 12 | query_weighted | query_v1_weighted_ls | learnable_weighted_ls | 1.001095e+02 | 1.898996e+01 | 9.088799e-01 | -4.627971e-01 | 1.539439e+03 | 1.001095e+02 | uncertainty | 5.000000e-01 | 1.622106e+00 | 4.350790e+05 |
+| 12 | epgt | epgt_v1_full_traditional_ls | traditional_ls | 1.149097e+06 | 6.020369e+01 | 3.009984e-03 | -2.523818e+01 | 1.585031e+02 | 1.149097e+06 |  |  |  | 2.351460e+05 |
+| 12 | epgt_weighted | epgt_v1_uncertainty_weighted_ls | learnable_weighted_ls | 2.171701e+01 | 1.206034e+01 | 5.252411e-01 | -4.368726e+00 | 1.185056e+03 | 2.171701e+01 | uncertainty | 5.000000e-01 | 1.630071e+00 | 2.397780e+05 |
+| 12 | direct_h | direct_h_original_v1 | none | 9.913016e-01 | -3.794625e-02 | 9.913629e-01 | -3.767843e-02 | 4.959155e-01 | 9.913016e-01 |  |  |  | 2.541984e+06 |

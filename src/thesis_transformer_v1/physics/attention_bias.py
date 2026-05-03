@@ -8,7 +8,7 @@ import torch
 
 from thesis_transformer_v1.physics.priors import normalized_to_physical_grid
 
-
+#在给定的路径参数下，任意两个时频网格点（Query点和Context点）之间的物理相关性 $K(q, c)$
 def delay_doppler_correlation_kernel(
     query_coords: torch.Tensor,
     context_coords: torch.Tensor,
@@ -55,7 +55,8 @@ def delay_doppler_correlation_kernel(
     weights = path_gates[:, :, None, None]
     real = torch.sum(weights * torch.cos(phase), dim=1)
     imag = torch.sum(weights * torch.sin(phase), dim=1)
-    return torch.sqrt(real.square() + imag.square() + eps)
+    return torch.sqrt(real.square() + imag.square() + eps) 
+# 输出是一个实数张量K，并且通过路径门控权重进行加权。
 
 
 def delay_doppler_attention_bias(
@@ -66,7 +67,7 @@ def delay_doppler_attention_bias(
     path_gates: torch.Tensor,
     *,
     n_sym: int,
-    n_sc: int,
+    n_sc: int, # type: ignore
     symbol_period_s: float,
     subcarrier_spacing_hz: float,
     bias_scale: float = 1.0,
@@ -87,3 +88,4 @@ def delay_doppler_attention_bias(
     )
     return float(bias_scale) * torch.log(kernel + float(eps))
 
+#相关性通过对数函数转成偏置

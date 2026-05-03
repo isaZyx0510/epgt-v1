@@ -29,22 +29,19 @@ This matches the current project direction:
 tokens -> model parameters -> differentiable LS -> H_hat -> NMSE(H_hat, H_true)
 ```
 
-## Scenario Matrix
+## Formal 9-Way Scenario Matrix
 
 | Scenario | Architecture | LS mode | Purpose |
 | --- | --- | --- | --- |
 | `oracle` | oracle labels | traditional LS | Lower-bound reference for each `L_eff`. |
 | `hybrid` | `original_v1` | traditional LS | Plain Hybrid Transformer baseline. |
+| `uncertainty_traditional` | `uncertainty_v1` | traditional LS | Tests the uncertainty head without weighted LS. |
+| `uncertainty_weighted` | `uncertainty_v1` | learnable weighted LS | Mean-pooling uncertainty weighted LS. |
 | `query` | `query_v1` | traditional LS | Query decoder without weighted LS. |
 | `query_weighted` | `query_v1` | learnable weighted LS | Tests whether uncertainty-derived `W` helps. |
 | `epgt` | `epgt_v1_full` | traditional LS | Physics-guided Transformer baseline. |
 | `epgt_weighted` | `epgt_v1_uncertainty_ls` | learnable weighted LS | EPGT plus uncertainty-derived LS weights. |
-
-Optional:
-
-| Scenario | Architecture | LS mode | Purpose |
-| --- | --- | --- | --- |
-| `uncertainty` | `uncertainty_v1` | learnable weighted LS | Mean-pooling uncertainty baseline. |
+| `direct_h` | `original_v1` direct-H | none | Direct full-grid H regression baseline. |
 
 ## Main Comparisons
 
@@ -94,7 +91,20 @@ uv run --extra dev python scripts\e2\run_e2_training_scenarios.py --values 4 --s
 Main E2 comparison:
 
 ```powershell
-uv run --extra dev python scripts\e2\run_e2_training_scenarios.py --steps 80 --eval-interval 20 --train-batches 4 --val-batches 2
+uv run --extra dev python scripts\e2\run_e2_training_scenarios.py
+```
+
+Formal defaults:
+
+```text
+steps = 80
+lr = 1e-4
+eval_interval = 1
+train_batches = 32
+val_batches = 8
+batch_size = 16
+loss_mode = reconstruction
+device = auto
 ```
 
 Only uncertainty-weighted comparison:
@@ -114,20 +124,18 @@ uv run --extra dev python scripts\e2\run_e2_training_scenarios.py --scenarios hy
 Default output:
 
 ```text
-experiments/e2_effective_paths/training_scenarios.json
+experiments/e2_effective_paths/formal_9way/
 ```
 
-Each row includes:
+The result folder includes:
 
 ```text
-experiment
-scenario
-variant
-sweep_name = l_eff
-sweep_value
-config
-history
-final
+run_metadata.json
+results.json
+results_partial.json
+summary_scientific.csv
+summary_scientific.md
+plots/
 ```
 
 The most important metrics are:

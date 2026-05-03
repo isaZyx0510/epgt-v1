@@ -34,7 +34,7 @@ RE is trustworthy, for example under symbol errors.
 
 ```text
 configs/
-  data/          Experiment data settings: E0-E5 and shared common-delay config
+  data/          Experiment data settings: E0-E6 and shared common-delay config
   model/         Baseline model configs
   model/pgt/     EPGT-v1 model and physics-guidance configs
   physics/       Reusable physics-prior fragments
@@ -50,7 +50,7 @@ src/thesis_transformer_v1/
 scripts/
   e0/                       E0 oracle LS sanity check
   e1/                       E1 clean comparison
-  e2/                       E2 effective-path training scenarios
+  e2/                       E2 formal 9-way effective-path comparison package
   e3/                       E3 AWGN/SNR sweep
   e4/                       E4 symbol-error sweep
   e5/                       E5 full-stress comparison
@@ -72,6 +72,12 @@ tests/
 ```
 
 ## Common Commands
+
+E2 formal 9-way comparison:
+
+```powershell
+uv run --extra dev python scripts\e2\run_e2_training_scenarios.py
+```
 
 EPGT H-loss quick run:
 
@@ -105,9 +111,14 @@ uv run --extra dev ruff check src tests scripts
 
 ## Key Docs
 
+- `scripts/README.md`
+- `docs/e2_training_scenarios.md`
+- `docs/pgt/epgt_complete_report.md`
 - `docs/pgt/epgt_v1_architecture_diagram.md`
 - `docs/pgt/project_architecture.md`
 - `docs/pgt/folder_plan.md`
 - `docs/ls_plugin_notes.md`
 - `docs/query_reconstruction_notes.md`
+- `openspec/changes/add-formal-e2-9way-comparison/`
+- `openspec/changes/add-epgt-uncertainty-weighted-ls/`
 - `openspec/changes/build-physics-guided-transformer/`

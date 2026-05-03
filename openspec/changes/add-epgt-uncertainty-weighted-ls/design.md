@@ -96,7 +96,7 @@ path 参数不确定性。因此训练入口提供轻量正则：
 ## 推荐命令
 
 ```powershell
-uv run --extra dev python scripts\pgt\train_pgt_h_loss.py `
+uv run --extra dev python scripts\e6\train_pgt_h_loss.py `
   --config configs\data\e6_h_loss_l5.yaml `
   --model-config configs\model\pgt\epgt_v1_uncertainty_ls.yaml `
   --steps 200 `

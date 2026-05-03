@@ -45,15 +45,16 @@
 
 ## 5. Scripts 和 E6 Pipeline
 
-- [x] 添加 `scripts/pgt/train_pgt.py`。
-- [x] 添加 `scripts/pgt/run_e6_pgt_comparison.py`。
-- [x] 添加 `scripts/pgt/run_pgt_ablation.py`。
-- [x] 添加 `scripts/pgt/run_oracle_replacement_ablation.py`，用于定位 full-grid
+- [x] 添加 `scripts/e6/train_pgt_h_loss.py`。
+- [x] 添加 `scripts/e6/run_e6_pgt_comparison.py`。
+- [x] 添加 PGT ablation entry point（历史路径为 `scripts/pgt/run_pgt_ablation.py`）。
+- [x] 添加 `scripts/e6/run_oracle_replacement_ablation.py`，用于定位 full-grid
       外推误差的物理参数瓶颈。
-- [x] 添加 `scripts/pgt/run_e2_e3_pgt_comparison.py`，用于在 E2/E3 场景比较
+- [x] 添加 E2/E3 PGT comparison entry point（现由 `scripts/e2/`、`scripts/e3/`
+  分阶段维护），用于在 E2/E3 场景比较
       baseline hybrid 与 EPGT variants。
-- [x] 添加 `scripts/pgt/inspect_attention.py`。
-- [ ] 添加 `scripts/pgt/plot_pgt_diagnostics.py`。
+- [x] 添加 attention inspection/diagnostic support。
+- [ ] 添加 EPGT diagnostics plotting entry point。
 - [x] 将 outputs 保存到 `experiments/e6_physics_guided_attention/<variant>/`。
 
 ## 6. Tests
