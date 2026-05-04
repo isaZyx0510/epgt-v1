@@ -1,0 +1,9 @@
+run,best_variant,reconstruction_weight,finetune_steps,channel_nmse,channel_nmse_db,val_normalized_mse_sum,val_delay_loss,result_dir
+param_only,epgt_v1_uncertainty_weighted_ls,,0,2.069003e-02,-1.731739e+01,5.791449e-02,1.950206e-02,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\param_only_physical_models
+two_stage_original_3us_rw0p05_ft80,epgt_v1_full_traditional_ls,0.05,80,2.093953e-01,-8.141297e+00,2.445635e-01,1.671729e-02,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\two_stage_param_warmup_reconstruction
+two_stage_0p5us_rw0p05_ft80,uncertainty_v1_weighted_ls,0.05,80,1.029182e-02,-2.229658e+01,8.844367e-02,4.061423e-03,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\diagnostic_l6_rel_delay_0p5us
+two_stage_0p5us_rw0p01_ft20,epgt_v1_uncertainty_weighted_ls,0.01,20,4.607480e-04,-3.501403e+01,4.027131e-02,8.644880e-04,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\diag_l6_rel_delay_0p5us_rw0p01_ft20
+two_stage_0p5us_rw0p01_ft40,uncertainty_v1_weighted_ls,0.01,40,5.308669e-04,-3.396683e+01,4.315809e-02,1.096582e-03,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\diag_l6_rel_delay_0p5us_rw0p01_ft40
+two_stage_0p5us_rw0p02_ft20,uncertainty_v1_weighted_ls,0.02,20,2.783713e-04,-3.785178e+01,3.870734e-02,3.460838e-03,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\diag_l6_rel_delay_0p5us_rw0p02_ft20
+two_stage_0p5us_rw0p02_ft40,query_v1_weighted_ls,0.02,40,5.402334e-04,-3.320102e+01,4.035495e-02,3.377649e-03,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\diag_l6_rel_delay_0p5us_rw0p02_ft40
+oracle_ls_no_ai,oracle_ls,,,1.780487e-10,-9.747029e+01,,,F:\HUAWEI_Theise\Thesis Transformer version1\experiments\e2_effective_paths\formal_9way

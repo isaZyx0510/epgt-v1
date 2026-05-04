@@ -125,9 +125,24 @@ def apply_cli_model_overrides(
         "nhead": args.nhead,
         "dim_feedforward": args.dim_feedforward,
         "dropout": args.dropout,
+        "max_rel_delay_s": args.max_rel_delay_s,
+        "max_doppler_hz": args.max_doppler_hz,
+        "max_total_delay_s": args.max_total_delay_s,
+        "max_cfo_hz": args.max_cfo_hz,
+        "max_rx_time_offset_s": args.max_rx_time_offset_s,
     }
     merged.update({key: value for key, value in cli_values.items() if value is not None})
     return merged
+
+
+def param_loss_weights_from_args(args: argparse.Namespace) -> dict[str, float]:
+    return {
+        "tau0": float(args.tau0_loss_weight),
+        "cfo": float(args.cfo_loss_weight),
+        "delay": float(args.delay_loss_weight),
+        "doppler": float(args.doppler_loss_weight),
+        "rx_offset": float(args.rx_offset_loss_weight),
+    }
 
 
 def serializable_config(cfg: ExperimentConfig) -> dict[str, Any]:
@@ -257,6 +272,7 @@ def run_scenario(
                 else 0.0
             ),
             device=args.device,
+            param_loss_weights=param_loss_weights_from_args(args),
         )
     return train_hybrid_quick(
         cfg,
@@ -278,6 +294,7 @@ def run_scenario(
             else 0.0
         ),
         device=args.device,
+        param_loss_weights=param_loss_weights_from_args(args),
     )
 
 
@@ -301,6 +318,7 @@ def scenario_config_for_row(
         "train_batches": args.train_batches,
         "val_batches": args.val_batches,
         "model": model_overrides,
+        "param_loss_weights": param_loss_weights_from_args(args),
     }
     if "architecture" in scenario:
         config["architecture"] = scenario["architecture"]
@@ -333,6 +351,14 @@ def write_summary(rows: list[dict[str, Any]], output_root: Path) -> None:
         "weights_source",
         "weights_min",
         "weights_max",
+        "tau0_loss_weight",
+        "cfo_loss_weight",
+        "delay_loss_weight",
+        "doppler_loss_weight",
+        "rx_offset_loss_weight",
+        "max_total_delay_s",
+        "max_rel_delay_s",
+        "max_rx_time_offset_s",
         "parameter_count",
     ]
     csv_path = output_root / "summary_scientific.csv"
@@ -393,6 +419,24 @@ def write_summary(rows: list[dict[str, Any]], output_root: Path) -> None:
                     "weights_source": final.get("weights_source", ""),
                     "weights_min": sci(final.get("weights_min")),
                     "weights_max": sci(final.get("weights_max")),
+                    "tau0_loss_weight": sci(row["config"]["param_loss_weights"]["tau0"]),
+                    "cfo_loss_weight": sci(row["config"]["param_loss_weights"]["cfo"]),
+                    "delay_loss_weight": sci(row["config"]["param_loss_weights"]["delay"]),
+                    "doppler_loss_weight": sci(row["config"]["param_loss_weights"]["doppler"]),
+                    "rx_offset_loss_weight": sci(
+                        row["config"]["param_loss_weights"]["rx_offset"]
+                    ),
+                    "max_total_delay_s": sci(
+                        row.get("model", {}).get("model_cfg", {}).get("max_total_delay_s")
+                    ),
+                    "max_rel_delay_s": sci(
+                        row.get("model", {}).get("model_cfg", {}).get("max_rel_delay_s")
+                    ),
+                    "max_rx_time_offset_s": sci(
+                        row.get("model", {})
+                        .get("model_cfg", {})
+                        .get("max_rx_time_offset_s")
+                    ),
                     "parameter_count": sci(row.get("model", {}).get("parameter_count")),
                 }
             )
@@ -609,6 +653,7 @@ def write_run_metadata(
             "warmup_steps": args.warmup_steps,
             "finetune_loss_mode": args.finetune_loss_mode,
             "uncertainty_regularization_weight": args.uncertainty_regularization_weight,
+            "param_loss_weights": param_loss_weights_from_args(args),
             "device": args.device,
         },
         "model_hyperparameters": {
@@ -618,6 +663,11 @@ def write_run_metadata(
             "nhead": args.nhead,
             "dim_feedforward": args.dim_feedforward,
             "dropout": args.dropout,
+            "max_rel_delay_s": args.max_rel_delay_s,
+            "max_doppler_hz": args.max_doppler_hz,
+            "max_total_delay_s": args.max_total_delay_s,
+            "max_cfo_hz": args.max_cfo_hz,
+            "max_rx_time_offset_s": args.max_rx_time_offset_s,
         },
         "base_config": serializable_config(base_cfg),
         "data_info": dataset_info(base_cfg, args.train_batches, args.val_batches),
@@ -650,6 +700,16 @@ def main() -> None:
     parser.add_argument("--nhead", type=int, default=4)
     parser.add_argument("--dim-feedforward", type=int, default=192)
     parser.add_argument("--dropout", type=float, default=0.05)
+    parser.add_argument("--max-rel-delay-s", type=float, default=None)
+    parser.add_argument("--max-doppler-hz", type=float, default=None)
+    parser.add_argument("--max-total-delay-s", type=float, default=None)
+    parser.add_argument("--max-cfo-hz", type=float, default=None)
+    parser.add_argument("--max-rx-time-offset-s", type=float, default=None)
+    parser.add_argument("--tau0-loss-weight", type=float, default=1.0)
+    parser.add_argument("--cfo-loss-weight", type=float, default=1.0)
+    parser.add_argument("--delay-loss-weight", type=float, default=1.0)
+    parser.add_argument("--doppler-loss-weight", type=float, default=1.0)
+    parser.add_argument("--rx-offset-loss-weight", type=float, default=1.0)
     parser.add_argument(
         "--loss-mode",
         choices=["reconstruction", "param", "param_plus_reconstruction", "two_stage"],

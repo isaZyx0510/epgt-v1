@@ -132,8 +132,17 @@ def normalized_param_loss(
     outputs: dict[str, torch.Tensor],
     labels: dict[str, np.ndarray],
     model_cfg: TransformerConfig,
+    loss_weights: dict[str, float] | None = None,
 ) -> tuple[torch.Tensor, dict[str, float]]:
     device = outputs["total_delay_s"].device
+    weights = {
+        "tau0": 1.0,
+        "cfo": 1.0,
+        "delay": 1.0,
+        "doppler": 1.0,
+        "rx_offset": 1.0,
+    }
+    weights.update(loss_weights or {})
     target_tau0 = torch.from_numpy(labels["total_delay_s"]).to(device)
     target_cfo = torch.from_numpy(labels["cfo_hz"]).to(device)
     target_delay = torch.from_numpy(labels["rel_delay_s"]).to(device)
@@ -160,13 +169,24 @@ def normalized_param_loss(
         outputs["rx_time_offsets_s"] / model_cfg.max_rx_time_offset_s,
         target_rx / model_cfg.max_rx_time_offset_s,
     )
-    total = loss_tau0 + loss_cfo + loss_delay + loss_doppler + loss_rx
+    total = (
+        float(weights["tau0"]) * loss_tau0
+        + float(weights["cfo"]) * loss_cfo
+        + float(weights["delay"]) * loss_delay
+        + float(weights["doppler"]) * loss_doppler
+        + float(weights["rx_offset"]) * loss_rx
+    )
     parts = {
         "tau0_loss": float(loss_tau0.detach()),
         "cfo_loss": float(loss_cfo.detach()),
         "delay_loss": float(loss_delay.detach()),
         "doppler_loss": float(loss_doppler.detach()),
         "rx_offset_loss": float(loss_rx.detach()),
+        "tau0_loss_weight": float(weights["tau0"]),
+        "cfo_loss_weight": float(weights["cfo"]),
+        "delay_loss_weight": float(weights["delay"]),
+        "doppler_loss_weight": float(weights["doppler"]),
+        "rx_offset_loss_weight": float(weights["rx_offset"]),
     }
     if "rel_delay_log_var" in outputs and "doppler_log_var" in outputs:
         delay_err = (outputs["rel_delay_s"] - target_delay) / model_cfg.max_rel_delay_s
@@ -248,9 +268,10 @@ def validation_param_loss_from_outputs(
     data: dict[str, Any],
     cfg: ExperimentConfig,
     model_cfg: TransformerConfig,
+    loss_weights: dict[str, float] | None = None,
 ) -> dict[str, float]:
     labels = nonlinear_oracle_params(data["channel_labels"], l_eff=cfg.l_eff)
-    loss, parts = normalized_param_loss(outputs, labels, model_cfg)
+    loss, parts = normalized_param_loss(outputs, labels, model_cfg, loss_weights)
     metrics = {"val_param_loss": float(loss.detach())}
     metrics.update({f"val_{key}": value for key, value in parts.items()})
     return metrics
@@ -273,6 +294,8 @@ def train_hybrid_quick(
     finetune_loss_mode: str = "param_plus_reconstruction",
     uncertainty_regularization_weight: float = 0.0,
     device: str | torch.device | None = None,
+    return_model_object: bool = False,
+    param_loss_weights: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     if loss_mode not in {"param", "reconstruction", "param_plus_reconstruction", "two_stage"}:
         raise ValueError(
@@ -317,7 +340,12 @@ def train_hybrid_quick(
         uncertainty_reg_parts: dict[str, float] = {}
         if active_loss_mode in {"param", "param_plus_reconstruction"}:
             labels = nonlinear_oracle_params(data["channel_labels"], l_eff=cfg.l_eff)
-            param_loss, param_parts = normalized_param_loss(outputs, labels, model_cfg)
+            param_loss, param_parts = normalized_param_loss(
+                outputs,
+                labels,
+                model_cfg,
+                param_loss_weights,
+            )
 
         if active_loss_mode == "param":
             if param_loss is None:
@@ -378,6 +406,7 @@ def train_hybrid_quick(
                             val_sample,
                             cfg,
                             model_cfg,
+                            param_loss_weights,
                         )
                     )
                 params = torch_params_to_numpy(eval_outputs)
@@ -414,11 +443,17 @@ def train_hybrid_quick(
                 )
             )
         final.update(average_metric_rows(eval_rows))
-    return {
+    result: dict[str, Any] = {
         "history": history,
         "final": final,
         "model": _model_summary(model, model_cfg, train_device),
     }
+    if return_model_object:
+        result["model_object"] = model
+        result["model_cfg_object"] = model_cfg
+        result["device_object"] = train_device
+        result["val_data_object"] = val_data
+    return result
 
 
 def train_direct_h_quick(

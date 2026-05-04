@@ -1,0 +1,56 @@
+{
+  "setting": {
+    "name": "combined",
+    "max_total_delay_s": 2.5e-07,
+    "max_rx_time_offset_s": 6e-08,
+    "tau0_loss_weight": 4.0,
+    "rx_offset_loss_weight": 4.0
+  },
+  "args": {
+    "config": "configs/data/e2_effective_paths.yaml",
+    "output_root": "experiments/e2_effective_paths/diagnostic_l6_shared_phase_supervision",
+    "device": "cuda",
+    "l_eff": 6,
+    "architecture": "uncertainty_v1",
+    "ls_mode": "learnable_weighted_ls",
+    "steps": 100,
+    "warmup_steps": 80,
+    "lr": 0.0001,
+    "reconstruction_weight": 0.02,
+    "train_batches": 32,
+    "val_batches": 8,
+    "eval_interval": 1,
+    "uncertainty_regularization_weight": 0.0001,
+    "max_rel_delay_s": 5e-07,
+    "d_model": 96,
+    "num_layers": 2,
+    "nhead": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.05,
+    "ridge": 0.0,
+    "observed_symbol_indices": [
+      6,
+      7
+    ],
+    "cfo_loss_weight": 1.0,
+    "delay_loss_weight": 1.0,
+    "doppler_loss_weight": 1.0
+  },
+  "model_overrides": {
+    "d_model": 96,
+    "num_layers": 2,
+    "nhead": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.05,
+    "max_rel_delay_s": 5e-07,
+    "max_total_delay_s": 2.5e-07,
+    "max_rx_time_offset_s": 6e-08
+  },
+  "param_loss_weights": {
+    "tau0": 4.0,
+    "cfo": 1.0,
+    "delay": 1.0,
+    "doppler": 1.0,
+    "rx_offset": 4.0
+  }
+}

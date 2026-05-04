@@ -1,0 +1,219 @@
+{
+  "experiment": "e2_effective_paths",
+  "purpose": "Compare 9 model/LS combinations under identical E2 effective-path settings.",
+  "scenario_order": [
+    "hybrid",
+    "uncertainty_traditional",
+    "uncertainty_weighted",
+    "query",
+    "query_weighted",
+    "epgt",
+    "epgt_weighted"
+  ],
+  "l_eff_values": [
+    6
+  ],
+  "training_hyperparameters": {
+    "steps": 120,
+    "lr": 0.0001,
+    "optimizer": "AdamW",
+    "eval_interval": 1,
+    "train_batches": 32,
+    "val_batches": 8,
+    "loss_mode": "two_stage",
+    "reconstruction_weight": 0.02,
+    "warmup_steps": 80,
+    "finetune_loss_mode": "param_plus_reconstruction",
+    "uncertainty_regularization_weight": 0.0001,
+    "device": "cuda"
+  },
+  "model_hyperparameters": {
+    "baseline_model_config": "configs/model/hybrid_transformer.yaml",
+    "d_model": 96,
+    "num_layers": 2,
+    "nhead": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.05,
+    "max_rel_delay_s": 5e-07,
+    "max_doppler_hz": null,
+    "max_total_delay_s": null,
+    "max_cfo_hz": null,
+    "max_rx_time_offset_s": null
+  },
+  "base_config": {
+    "batch_size": 16,
+    "seed": 2026,
+    "l_eff": 12,
+    "ridge": 0.0,
+    "ofdm": {
+      "n_tx": 4,
+      "n_rx": 4,
+      "n_sc": 48,
+      "n_sym": 8,
+      "cp_len": 16,
+      "subcarrier_spacing_hz": 15000.0,
+      "modulation": "16QAM"
+    },
+    "pilot": {
+      "mode": "sparse2d",
+      "symbol_spacing": 2,
+      "subcarrier_spacing": 4,
+      "symbol_offset": 0,
+      "subcarrier_offset": 0,
+      "orthogonal_axis": "frequency",
+      "pilot_power": 1.0
+    },
+    "channel": {
+      "model": "tdl_c",
+      "mimo_mode": "common_delay",
+      "n_paths": 12,
+      "delay_spread_s": 3e-07,
+      "normalize_power": true,
+      "dominant_path_decay_db": 3.0,
+      "max_doppler_hz": 0.0,
+      "carrier_frequency_hz": 3500000000.0,
+      "antenna_spacing_wavelength": 0.5,
+      "rx_offset_range_wavelength": [
+        0.0,
+        0.0
+      ],
+      "angle_range_deg": [
+        -60.0,
+        60.0
+      ],
+      "randomize_path_subset": false
+    },
+    "impairment": {
+      "snr_db": 100.0,
+      "cfo_hz": 0.0,
+      "random_cfo_hz": 0.0
+    },
+    "thesis_impairment": {
+      "tau0_range_s": [
+        0.0,
+        2e-07
+      ],
+      "cfo_range_hz": [
+        0.0,
+        0.0
+      ],
+      "rx_time_offset_range_s": [
+        -5e-08,
+        5e-08
+      ],
+      "awgn_snr_db": null
+    },
+    "observation": {
+      "input_symbol_indices": [
+        6,
+        7
+      ],
+      "symbol_error_rate": 0.0,
+      "include_reliability": true
+    }
+  },
+  "data_info": {
+    "train_batches": 32,
+    "val_batches": 8,
+    "batch_size": 16,
+    "train_samples_per_l_eff_scenario": 512,
+    "validation_samples_per_l_eff_scenario": 128,
+    "token_shape": [
+      16,
+      96,
+      20
+    ],
+    "token_feature_dim": 20,
+    "observation_indices_shape": [
+      96,
+      2
+    ],
+    "tx_grid_observed_shape": [
+      16,
+      4,
+      8,
+      48
+    ],
+    "rx_grid_shape": [
+      16,
+      4,
+      8,
+      48
+    ],
+    "h_freq_shape": [
+      16,
+      4,
+      4,
+      8,
+      48
+    ],
+    "freq_hz_shape": [
+      48
+    ],
+    "time_s_shape": [
+      8
+    ],
+    "input_symbol_indices": [
+      6,
+      7
+    ],
+    "symbol_error_rate": 0.0,
+    "include_reliability": true,
+    "seeds": {
+      "train_seed_start": 2026,
+      "val_seed_start": 12026,
+      "observation_rng_offset": 99
+    }
+  },
+  "scenarios": {
+    "hybrid": {
+      "kind": "hybrid",
+      "architecture": "original_v1",
+      "variant": "hybrid_original_v1_traditional_ls",
+      "ls_mode": "traditional_ls",
+      "description": "Mean-pooling hybrid baseline."
+    },
+    "uncertainty_traditional": {
+      "kind": "hybrid",
+      "architecture": "uncertainty_v1",
+      "variant": "uncertainty_v1_traditional_ls",
+      "ls_mode": "traditional_ls",
+      "description": "Uncertainty-head model evaluated with uniform LS."
+    },
+    "uncertainty_weighted": {
+      "kind": "hybrid",
+      "architecture": "uncertainty_v1",
+      "variant": "uncertainty_v1_weighted_ls",
+      "ls_mode": "learnable_weighted_ls",
+      "description": "Uncertainty-head model with uncertainty-derived LS weights."
+    },
+    "query": {
+      "kind": "hybrid",
+      "architecture": "query_v1",
+      "variant": "query_v1_traditional_ls",
+      "ls_mode": "traditional_ls",
+      "description": "Query decoder with traditional LS."
+    },
+    "query_weighted": {
+      "kind": "hybrid",
+      "architecture": "query_v1",
+      "variant": "query_v1_weighted_ls",
+      "ls_mode": "learnable_weighted_ls",
+      "description": "Query decoder with uncertainty-derived LS weights."
+    },
+    "epgt": {
+      "kind": "epgt",
+      "variant": "epgt_v1_full_traditional_ls",
+      "model_config": "configs/model/pgt/epgt_v1_full.yaml",
+      "ls_mode": "traditional_ls",
+      "description": "Full EPGT physics guidance with traditional LS."
+    },
+    "epgt_weighted": {
+      "kind": "epgt",
+      "variant": "epgt_v1_uncertainty_weighted_ls",
+      "model_config": "configs/model/pgt/epgt_v1_uncertainty_ls.yaml",
+      "ls_mode": "learnable_weighted_ls",
+      "description": "EPGT with path uncertainty and weighted LS."
+    }
+  }
+}
